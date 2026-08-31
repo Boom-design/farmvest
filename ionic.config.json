@@ -1,0 +1,7 @@
+{
+  "name": "farmvest",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
