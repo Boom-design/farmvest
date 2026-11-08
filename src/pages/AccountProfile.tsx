@@ -3,6 +3,7 @@ import { IonContent, IonIcon, IonPage } from '@ionic/react';
 import {
   callOutline,
   cameraOutline,
+  closeOutline,
   documentTextOutline,
   locationOutline,
   mailOutline,
@@ -14,6 +15,7 @@ import DashboardHeader from '../components/DashboardHeader';
 import AddressPicker from '../components/AddressPicker';
 import { supabase } from '../supabaseClient';
 import PayoutAccountCard from '../components/PayoutAccountCard';
+import Portal from '../components/Portal';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../components/Toast';
 import { hasValue, NONE, orNone, pillClass } from '../lib/format';
@@ -99,6 +101,9 @@ const AccountProfile: React.FC = () => {
   const [savingProfile, setSavingProfile] = useState(false);
   const [profileNote, setProfileNote] = useState<Note>(null);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  /** Signed link to the submitted ID while it is open in the viewer. */
+  const [idViewUrl, setIdViewUrl] = useState<string | null>(null);
+  const [idViewError, setIdViewError] = useState<string | null>(null);
 
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -404,11 +409,18 @@ const AccountProfile: React.FC = () => {
   const viewValidId = async () => {
     if (!details?.valid_id_url) return;
 
-    const { data } = await supabase.storage
+    setIdViewError(null);
+    const { data, error } = await supabase.storage
       .from('valid-ids')
       .createSignedUrl(details.valid_id_url, 300);
 
-    if (data) window.open(data.signedUrl, '_blank', 'noopener');
+    // Shown on the page rather than in a new tab: a phone browser blocks a tab
+    // opened after the link is fetched, so the button would seem to do nothing.
+    if (error || !data) {
+      setIdViewError(error?.message ?? 'The ID could not be opened.');
+      return;
+    }
+    setIdViewUrl(data.signedUrl);
   };
 
   if (!profile) {
@@ -878,6 +890,7 @@ const AccountProfile: React.FC = () => {
                 ) : (
                   <p className="dash-stat__hint">No ID document is attached to this account.</p>
                 )}
+                {idViewError && <p className="dash-error">{idViewError}</p>}
               </div>
             </section>
             )}
@@ -966,6 +979,35 @@ const AccountProfile: React.FC = () => {
             </section>
           </div>
         </div>
+        {idViewUrl && (
+          <Portal
+            className="dash-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Submitted ID"
+            onClick={() => setIdViewUrl(null)}
+          >
+            <div className="dash-modal__panel" onClick={(event) => event.stopPropagation()}>
+              <div className="dash-modal__head">
+                <div>
+                  <p className="dash-modal__eyebrow">Submitted for verification</p>
+                  <h2 className="dash-modal__title">{orNone(details?.valid_id_type)}</h2>
+                </div>
+                <button
+                  type="button"
+                  className="dash-modal__close"
+                  onClick={() => setIdViewUrl(null)}
+                  aria-label="Close"
+                >
+                  <IonIcon icon={closeOutline} />
+                </button>
+              </div>
+              <div className="dash-modal__body">
+                <img className="dash-modal__image" src={idViewUrl} alt="Submitted government ID" />
+              </div>
+            </div>
+          </Portal>
+        )}
       </IonContent>
     </IonPage>
   );
