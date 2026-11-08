@@ -9,6 +9,7 @@ import Pager, { usePaged } from '../../components/Pager';
 import { supabase } from '../../supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
 import { firstOf, orNone, peso, pillClass, shortDate } from '../../lib/format';
+import { releaseLabel } from '../../lib/funding';
 import { COMMISSION_RATE, projectCommission } from '../../lib/revenue';
 import '../../theme/dashboard.css';
 import Skeleton from '../../components/Skeleton';
@@ -604,7 +605,7 @@ const CustomerReports: React.FC = () => {
                           <th>Category</th>
                           <th>Amount Invested</th>
                           <th>Project Raised</th>
-                          <th>Milestone Stage</th>
+                          <th>Funds</th>
                           <th>Date Invested</th>
                           <th>Status</th>
                           <th>{tab === 'Cancelled Projects' ? 'Refund' : 'Return Received'}</th>
@@ -641,7 +642,7 @@ const CustomerReports: React.FC = () => {
                                 {peso(row.projects?.current_funding ?? 0)} of{' '}
                                 {peso(row.projects?.funding_goal ?? 0)}
                               </td>
-                              <td className="dash-table__muted">{row.milestone_stage}</td>
+                              <td className="dash-table__muted">{releaseLabel(row.milestone_stage)}</td>
                               <td className="dash-table__muted">{shortDate(row.created_at)}</td>
                               <td>
                                 <span className={pillClass(row.projects?.status ?? '')}>

@@ -15,6 +15,7 @@ import { supabase } from '../supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
 import { orNone, peso, pillClass, shortDate } from '../lib/format';
 import { isReleasedStage } from '../lib/funding';
+import { releaseLabel } from '../lib/funding';
 import { categoryLook } from '../lib/categories';
 import { loadAdvisory } from '../lib/weather';
 import {
@@ -456,7 +457,7 @@ const InvestorDashboard: React.FC<InvestorDashboardProps> = ({ embedded = false 
                           <div>
                             <p className="dash-row__title">{orNone(row.projects?.title)}</p>
                             <p className="dash-row__meta">
-                              {peso(row.amount)} · {row.milestone_stage} stage ·{' '}
+                              {peso(row.amount)} · {releaseLabel(row.milestone_stage)} ·{' '}
                               {shortDate(row.created_at)}
                             </p>
                           </div>

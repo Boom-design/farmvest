@@ -10,6 +10,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { orNone, peso, shortDate } from '../../../lib/format';
+import { releaseLabel } from '../../../lib/funding';
 import { commissionOf, rentalDays, rentalFee } from '../../../lib/revenue';
 import ReportTable, { type ReportColumn } from './ReportTable';
 import { applyFilters, type ReportFilters } from './reportFilters';
@@ -145,7 +146,7 @@ export const InvestmentsTab: React.FC<TabProps> = ({ filters, onError }) => {
     { label: 'Email', text: (row) => orNone(row.customers?.users?.email) },
     { label: 'Project', text: (row) => orNone(row.projects?.title) },
     { label: 'Farm Owner', text: (row) => orNone(row.projects?.customers?.users?.name) },
-    { label: 'Milestone Stage', text: (row) => orNone(row.milestone_stage) },
+    { label: 'Funds', text: (row) => releaseLabel(row.milestone_stage) },
     {
       label: 'Amount Invested',
       text: (row) => peso(row.amount),

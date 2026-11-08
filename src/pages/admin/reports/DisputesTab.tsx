@@ -6,6 +6,7 @@ import EmptyState from '../../../components/EmptyState';
 import { useToast } from '../../../components/Toast';
 import { useAuth } from '../../../contexts/AuthContext';
 import { hasValue, orNone, peso, pillClass, shortDate } from '../../../lib/format';
+import { releaseLabel } from '../../../lib/funding';
 import ReportTable, { type ReportColumn } from './ReportTable';
 import { applyFilters, type ReportFilters } from './reportFilters';
 import '../../../theme/dashboard.css';
@@ -415,7 +416,7 @@ const DisputesTab: React.FC<DisputesTabProps> = ({ filters, onError }) => {
                   <tr>
                     <th>Investor</th>
                     <th>Amount at Risk</th>
-                    <th>Milestone Stage</th>
+                    <th>Funds</th>
                     <th>Date Invested</th>
                   </tr>
                 </thead>
@@ -424,7 +425,7 @@ const DisputesTab: React.FC<DisputesTabProps> = ({ filters, onError }) => {
                     <tr key={row.investments_id}>
                       <td>{orNone(row.customers?.users?.name)}</td>
                       <td>{peso(row.amount)}</td>
-                      <td className="dash-table__muted">{orNone(row.milestone_stage)}</td>
+                      <td className="dash-table__muted">{releaseLabel(row.milestone_stage)}</td>
                       <td className="dash-table__muted">{shortDate(row.created_at)}</td>
                     </tr>
                   ))}

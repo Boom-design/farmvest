@@ -194,6 +194,10 @@ export const RELEASE_STAGES = [
 export const isFullyReleased = (releases: { stage: string }[] | null | undefined) =>
   (releases ?? []).some((release) => release.stage === 'Full' || release.stage === 'Final');
 
+/** Held while FarmVest keeps the money; Released once it has gone to the farm owner. */
+export const releaseLabel = (stage: string | null | undefined) =>
+  stage === 'Full' || stage === 'Final' ? 'Released' : 'Held';
+
 /** Whether an investment's money has reached the farm owner. */
 export const isReleasedStage = (stage: string | null | undefined) =>
   stage === 'Full' || stage === 'Final';

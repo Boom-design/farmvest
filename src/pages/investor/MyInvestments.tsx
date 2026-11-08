@@ -232,7 +232,7 @@ const MyInvestments: React.FC = () => {
               <div>
                 <p className="dash-stat__label">Funds Still Held</p>
                 <p className="dash-stat__value">{String(stats.held)}</p>
-                <p className="dash-stat__hint">Not yet at the Final stage</p>
+                <p className="dash-stat__hint">Not yet released to the farm owner</p>
               </div>
             </div>
           </div>
@@ -292,7 +292,7 @@ const MyInvestments: React.FC = () => {
                       <th>Category</th>
                       <th>Amount Invested</th>
                       <th>Project Funding</th>
-                      <th>Milestone Stage</th>
+                      <th>Funds</th>
                       <th>Date Invested</th>
                       <th>Payment</th>
                       <th>Agreement</th>
