@@ -125,6 +125,21 @@ const FILTERS = [
   'On Hold - Weather Advisory',
 ];
 
+/**
+ * What is left to pay on a booking paid by 50% downpayment, or 0.
+ *
+ * The balance is owed once the downpayment has cleared and no balance payment
+ * is waiting for review or already confirmed. A refused balance leaves it owed.
+ */
+const balanceDue = (fee: number, rentalPayments: { amount: number; payment_type: string; status: string }[]) => {
+  const down = rentalPayments.find((p) => p.payment_type === '50% Downpayment' && p.status === 'Confirmed');
+  if (!down) return 0;
+  const settled = rentalPayments.some(
+    (p) => p.payment_type === 'Balance' && ['Submitted', 'Confirmed'].includes(p.status)
+  );
+  return settled ? 0 : Math.max(0, fee - Number(down.amount));
+};
+
 const emptyInspection = {
   returned_at: new Date().toISOString().slice(0, 10),
   return_condition: 'Good',
@@ -351,6 +366,19 @@ const RentalBookings: React.FC = () => {
    */
   const saveInspection = async () => {
     if (!inspecting) return;
+
+    // A booking paid by downpayment closes only once its balance has cleared.
+    const rentalPayments = payments.filter((p) => p.rentals_id === inspecting.rentals_id);
+    const owed = balanceDue(rentalTotal(inspecting), rentalPayments);
+    const balanceWaiting = rentalPayments.some((p) => p.payment_type === 'Balance' && p.status === 'Submitted');
+    if (owed > 0 || balanceWaiting) {
+      setError(
+        balanceWaiting
+          ? 'The balance payment is waiting for review. Confirm it with View Receipt before closing the booking.'
+          : `The balance of ${peso(owed)} has not been paid. The renter pays it from My Rentals.`
+      );
+      return;
+    }
 
     const damaged = DAMAGED.includes(inspection.return_condition);
 
@@ -702,6 +730,15 @@ const RentalBookings: React.FC = () => {
                                     View Receipt
                                   </button>
                                 )}
+                                {(() => {
+                                  const due = balanceDue(
+                                    rentalTotal(rental),
+                                    payments.filter((p) => p.rentals_id === rental.rentals_id)
+                                  );
+                                  return due > 0 ? (
+                                    <p className="dash-row__meta">Balance {peso(due)} due on delivery</p>
+                                  ) : null;
+                                })()}
                               </>
                             );
                           })()}

@@ -51,6 +51,21 @@ type PaymentRow = {
 };
 
 /**
+ * What is left to pay on a booking paid by 50% downpayment, or 0.
+ *
+ * The balance is owed once the downpayment has cleared and no balance payment
+ * is waiting for review or already confirmed. A refused balance leaves it owed.
+ */
+const balanceDue = (fee: number, rentalPayments: { amount: number; payment_type: string; status: string }[]) => {
+  const down = rentalPayments.find((p) => p.payment_type === '50% Downpayment' && p.status === 'Confirmed');
+  if (!down) return 0;
+  const settled = rentalPayments.some(
+    (p) => p.payment_type === 'Balance' && ['Submitted', 'Confirmed'].includes(p.status)
+  );
+  return settled ? 0 : Math.max(0, fee - Number(down.amount));
+};
+
+/**
  * One tab per status a booking can still be in, in the order it passes through
  * them. Completed bookings are on the Reports page, for the same reason
  * completed projects are: they are a record, not something to act on.
@@ -79,6 +94,8 @@ const MyRentals: React.FC = () => {
   const [filter, setFilter] = useState(FILTERS[0]);
   const [payments, setPayments] = useState<PaymentRow[]>([]);
   const [payingFor, setPayingFor] = useState<RentalRow | null>(null);
+  /** When set, the payment form is for the balance of this amount, not a new payment. */
+  const [payingBalance, setPayingBalance] = useState<number | null>(null);
   const [receiving, setReceiving] = useState<RentalRow | null>(null);
   const [receivedBy, setReceivedBy] = useState('');
   const [loading, setLoading] = useState(true);
@@ -390,6 +407,26 @@ const MyRentals: React.FC = () => {
                                 </button>
                               )}
 
+                            {['Out for Delivery', 'Active'].includes(rental.status) &&
+                              (() => {
+                                const due = balanceDue(
+                                  rentalFeeOf(rental),
+                                  payments.filter((p) => p.rentals_id === rental.rentals_id)
+                                );
+                                return due > 0 ? (
+                                  <button
+                                    type="button"
+                                    className="dash-btn dash-btn--gold"
+                                    onClick={() => {
+                                      setPayingBalance(due);
+                                      setPayingFor(rental);
+                                    }}
+                                  >
+                                    Pay Balance {peso(due)}
+                                  </button>
+                                ) : null;
+                              })()}
+
                             {rental.status === 'Out for Delivery' && (
                               <button
                                 type="button"
@@ -515,7 +552,10 @@ const MyRentals: React.FC = () => {
             role="dialog"
             aria-modal="true"
             aria-label="Pay for this booking"
-            onClick={() => setPayingFor(null)}
+            onClick={() => {
+              setPayingFor(null);
+              setPayingBalance(null);
+            }}
           >
             <div
               className="dash-modal__panel dash-modal__panel--wide"
@@ -539,11 +579,16 @@ const MyRentals: React.FC = () => {
 
               <PaymentForm
                 rentalId={payingFor.rentals_id}
-                fee={rentalFeeOf(payingFor)}
+                balance={payingBalance !== null}
+                fee={payingBalance ?? rentalFeeOf(payingFor)}
                 cancelLabel="Cancel"
-                onCancel={() => setPayingFor(null)}
+                onCancel={() => {
+                  setPayingFor(null);
+                  setPayingBalance(null);
+                }}
                 onSubmitted={async () => {
                   setPayingFor(null);
+                  setPayingBalance(null);
                   await load();
                 }}
               />

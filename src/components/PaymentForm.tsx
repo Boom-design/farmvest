@@ -28,6 +28,8 @@ type PaymentFormProps = {
   investmentId?: string;
   /** A completed project being repaid to its investors, through FarmVest. */
   repaymentProjectId?: string;
+  /** The rest of a rental after a 50% downpayment: the form then takes only that. */
+  balance?: boolean;
   /** The whole rental fee or investment amount. A downpayment is half of it. */
   fee: number;
   /** Called once the payment row is written, so the caller can reload. */
@@ -52,6 +54,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   rentalId,
   investmentId,
   repaymentProjectId,
+  balance = false,
   fee,
   onSubmitted,
   cancelLabel,
@@ -61,7 +64,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   const { showSuccess } = useToast();
 
   const [methods, setMethods] = useState<PaymentMethod[] | null>(null);
-  const [payType, setPayType] = useState<string>(PAYMENT_TYPES[0]);
+  const [payType, setPayType] = useState<string>(balance ? 'Balance' : PAYMENT_TYPES[0]);
   const [methodId, setMethodId] = useState('');
   const [reference, setReference] = useState('');
   const [proof, setProof] = useState<File | null>(null);
@@ -109,11 +112,14 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
 
   // An investment is paid in full: half a pledge would leave the project short
   // of what it was counted as having raised.
-  const types =
-    investmentId || repaymentProjectId ? PAYMENT_TYPES.filter((type) => type === 'Full') : PAYMENT_TYPES;
+  const types: readonly string[] = balance
+    ? ['Balance']
+    : investmentId || repaymentProjectId
+      ? PAYMENT_TYPES.filter((type) => type === 'Full')
+      : PAYMENT_TYPES;
   const subject = repaymentProjectId ? 'repayment' : investmentId ? 'investment' : 'booking';
 
-  const amountFor = (type: string) => (type === 'Full' ? fee : Math.round(fee / 2));
+  const amountFor = (type: string) => (type === 'Full' || type === 'Balance' ? fee : Math.round(fee / 2));
 
   const submit = async () => {
     if (!profile) return;
@@ -224,6 +230,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
                       ? 'Capital plus the agreed return, for every investor.'
                       : investmentId
                       ? 'The full amount you committed.'
+                      : type === 'Balance'
+                      ? 'The rest of the rental fee, after your downpayment.'
                       : type === 'Full'
                         ? 'Nothing left to settle on delivery.'
                         : `${peso(fee - amountFor(type))} due on delivery.`}
