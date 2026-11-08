@@ -1,0 +1,700 @@
+/* Login and sign-up: brand panel on the left, form card on the right.
+ * Below 900px the brand panel becomes a short header and the form takes over. */
+
+.auth-content {
+  --background: var(--ion-background-color);
+}
+
+.auth-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 100%;
+}
+
+/* From 900px up the page itself never scrolls: the brand panel is fixed to the
+ * viewport so the farm artwork is always in view, and a long sign-up form
+ * scrolls inside the white sheet instead of dragging the whole page. */
+@media (min-width: 900px) {
+  .auth-content {
+    --overflow: hidden;
+  }
+
+  .auth-layout {
+    grid-template-columns: 1fr 1fr;
+    height: 100%;
+    min-height: 0;
+  }
+}
+
+/* ---------- brand panel ---------- */
+
+.auth-brand {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(180deg, #f8faf0 0%, #eef4e4 100%);
+  text-align: center;
+  overflow: hidden;
+}
+
+.auth-brand__top {
+  padding: 32px 28px 16px;
+  flex: 0 0 auto;
+}
+
+.auth-brand__logo {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+}
+
+.auth-brand__name {
+  margin: 6px 0 0;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: var(--ion-color-primary);
+}
+
+.auth-brand__name span {
+  color: #4ca832;
+}
+
+.auth-brand__tagline {
+  margin: 6px 0 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ion-color-tertiary);
+}
+
+.auth-brand__copy {
+  max-width: 420px;
+  margin: 14px auto 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ion-color-medium);
+}
+
+.auth-features {
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.auth-features li {
+  width: 104px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ion-color-tertiary);
+}
+
+.auth-features__icon {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 8px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.14);
+}
+
+.auth-features__icon img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+/* The artwork carries a thin dark frame of its own, which clip-path trims, and a
+ * hard top edge, which the mask fades into the cream panel behind it. */
+.auth-brand__hero {
+  width: 100%;
+  display: block;
+  margin-top: 20px;
+  clip-path: inset(2px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 14%);
+}
+
+/* Takes whatever height is left under the brand text and crops rather than
+ * pushing the panel past the fold, so the artwork needs no scrolling. */
+@media (min-width: 900px) {
+  .auth-brand__hero {
+    flex: 1 1 auto;
+    min-height: 180px;
+    object-fit: cover;
+    object-position: center bottom;
+  }
+}
+
+/* ---------- form panel ---------- */
+
+/* From 900px up the form is a white sheet that rides over the brand panel, which
+ * is what gives the rounded left edge and the shadow in the design. */
+.auth-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px 40px;
+  background: #ffffff;
+}
+
+@media (min-width: 900px) {
+  .auth-panel {
+    margin-left: -28px;
+    padding: 48px 44px;
+    border-radius: 28px 0 0 28px;
+    box-shadow: -18px 0 40px rgba(20, 83, 45, 0.1);
+    position: relative;
+    z-index: 1;
+    overflow-y: auto;
+    align-items: flex-start;
+  }
+
+  /* A short form still sits centred; a long one starts at the top and scrolls. */
+  .auth-panel > .auth-card {
+    margin: auto 0;
+  }
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 430px;
+}
+
+/* Sign-up carries far more fields, so it gets a wider sheet and pairs them up. */
+.auth-card--signup {
+  max-width: 620px;
+}
+
+.auth-pair {
+  display: grid;
+  gap: 0 16px;
+  grid-template-columns: 1fr;
+}
+
+/* Grid and flex children default to min-content width, which a long option label
+ * or file name would push past the panel edge. */
+.auth-pair > *,
+.auth-input,
+.auth-select,
+.address-picker__field,
+.address-picker__select {
+  min-width: 0;
+}
+
+@media (min-width: 560px) {
+  .auth-pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 700px) {
+  .auth-card--signup .address-picker {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.auth-back {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  padding: 6px 12px 6px 8px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(22, 101, 52, 0.08);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #166534;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.auth-back:hover {
+  background: rgba(22, 101, 52, 0.16);
+}
+
+.auth-back ion-icon {
+  font-size: 1rem;
+}
+
+.auth-card__title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--ion-color-primary);
+}
+
+.auth-card__subtitle {
+  margin: 6px 0 22px;
+  font-size: 14px;
+  color: var(--ion-color-medium);
+}
+
+.auth-field {
+  margin-bottom: 16px;
+}
+
+.auth-card--signup .auth-card__subtitle {
+  margin-bottom: 16px;
+}
+
+.auth-card--signup .auth-field {
+  margin-bottom: 12px;
+}
+
+.auth-card--signup .auth-hint {
+  margin: 0 0 12px;
+}
+
+.auth-card--signup .auth-divider {
+  margin: 12px 0;
+}
+
+.auth-card--signup .auth-submit,
+.auth-card--signup .auth-secondary {
+  padding: 13px;
+}
+
+.auth-field > label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.auth-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  border: 1.5px solid rgba(22, 101, 52, 0.35);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.auth-input:focus-within {
+  border-color: var(--ion-color-primary);
+  box-shadow: 0 0 0 3px rgba(22, 101, 52, 0.12);
+}
+
+.auth-input > ion-icon {
+  font-size: 19px;
+  color: var(--ion-color-primary);
+  flex-shrink: 0;
+}
+
+.auth-input input,
+.auth-input__select {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  padding: 13px 0;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--ion-color-dark);
+}
+
+.auth-input input::placeholder {
+  color: #9aa79b;
+}
+
+.auth-input__eye {
+  border: 0;
+  background: transparent;
+  padding: 4px;
+  font-size: 19px;
+  color: var(--ion-color-medium);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.auth-select {
+  width: 100%;
+  padding: 13px 12px;
+  border: 1.5px solid rgba(22, 101, 52, 0.35);
+  border-radius: 10px;
+  background: #ffffff;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--ion-color-dark);
+}
+
+.auth-select:focus {
+  outline: none;
+  border-color: var(--ion-color-primary);
+  box-shadow: 0 0 0 3px rgba(22, 101, 52, 0.12);
+}
+
+/* File pickers cannot be styled directly, so the label is the visible control. */
+.auth-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 12px;
+  border: 1.5px dashed rgba(22, 101, 52, 0.4);
+  border-radius: 10px;
+  background: #ffffff;
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  cursor: pointer;
+}
+
+.auth-upload ion-icon {
+  font-size: 20px;
+  color: var(--ion-color-primary);
+  flex-shrink: 0;
+}
+
+/* A long file name must wrap inside the box instead of pushing over the icon. */
+.auth-upload span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.auth-upload--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.auth-hint {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ion-color-medium);
+}
+
+.auth-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -4px 0 18px;
+}
+
+.auth-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  cursor: pointer;
+}
+
+.auth-check input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--ion-color-primary);
+}
+
+.auth-link {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+  cursor: pointer;
+}
+
+.auth-submit {
+  width: 100%;
+  padding: 15px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--ion-color-primary);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.auth-submit:hover:not(:disabled) {
+  background: var(--ion-color-primary-shade);
+}
+
+.auth-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+  color: var(--ion-color-medium);
+  font-size: 13px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(20, 83, 45, 0.15);
+}
+
+.auth-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  border: 1.5px solid rgba(22, 101, 52, 0.35);
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--ion-color-primary);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.auth-secondary:hover {
+  background: #f4f8ee;
+}
+
+.auth-secondary ion-icon {
+  font-size: 18px;
+}
+
+.auth-alert {
+  margin: 14px 0 0;
+  padding: 11px 13px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.auth-alert--danger {
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  color: var(--ion-color-danger);
+}
+
+.auth-alert--success {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #15803d;
+}
+
+.auth-trust {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 22px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #f1f6ea;
+}
+
+.auth-trust > ion-icon {
+  font-size: 26px;
+  color: var(--ion-color-primary);
+  flex-shrink: 0;
+}
+
+.auth-trust__title {
+  margin: 0 0 2px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.auth-trust__copy {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ion-color-medium);
+}
+
+/* ---------- compact brand header on phones ---------- */
+
+@media (max-width: 899px) {
+  .auth-brand__top {
+    padding: 24px 20px 12px;
+  }
+
+  .auth-brand__logo {
+    width: 64px;
+    height: 64px;
+  }
+
+  .auth-brand__name {
+    font-size: 30px;
+  }
+
+  .auth-brand__copy,
+  .auth-features {
+    display: none;
+  }
+
+  .auth-brand__hero {
+    max-height: 130px;
+    object-fit: cover;
+    object-position: center 60%;
+    margin-top: 14px;
+  }
+}
+
+/* ---------- forgot password ---------- */
+
+.auth-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--ion-color-primary);
+  cursor: pointer;
+}
+
+/* Two-step progress, so the user can see which half they are in. */
+.auth-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.auth-steps li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ion-color-medium);
+}
+
+.auth-steps li span {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(20, 83, 45, 0.1);
+  font-size: 12px;
+  color: var(--ion-color-medium);
+}
+
+.auth-steps--active {
+  color: var(--ion-color-primary);
+}
+
+.auth-steps--active span {
+  background: var(--ion-color-primary);
+  color: #ffffff;
+}
+
+.auth-steps--done span {
+  background: rgba(34, 197, 94, 0.2);
+  color: var(--ion-color-primary);
+}
+
+/* A six-digit code reads better spaced out and centred. */
+.auth-input__code {
+  letter-spacing: 0.4em;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.auth-input input:disabled {
+  color: var(--ion-color-medium);
+  cursor: not-allowed;
+}
+
+
+/* Two stacked secondary buttons on the reset step, so they need a gap the
+ * single-button layout never did. */
+.auth-secondary + .auth-secondary {
+  margin-top: 10px;
+}
+
+.auth-secondary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* The clock on the one-time code. Without it the page looks identical whether
+ * the code is still good or already dead. */
+.auth-countdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin: 14px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ion-color-medium);
+}
+
+.auth-countdown ion-icon {
+  font-size: 16px;
+}
+
+.auth-countdown--expired {
+  color: var(--ion-color-danger);
+}
+
+/* Password rules, shown while one is being typed and gone once it is complete.
+ *
+ * A list rather than a single pass/fail line: told only that a password is
+ * weak, people guess at which class is missing and guess wrong. */
+
+.auth-rules {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.auth-rules__item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.auth-rules__item ion-icon {
+  font-size: 15px;
+  color: #cbd5e1;
+  flex: 0 0 auto;
+}
+
+.auth-rules__item--met {
+  color: #15803d;
+}
+
+.auth-rules__item--met ion-icon {
+  color: #22c55e;
+}
+
+.auth-rules__mismatch {
+  margin: 6px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #b91c1c;
+}

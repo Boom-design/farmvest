@@ -1,0 +1,121 @@
+/* Payment form, shared by the booking dialog and My Rentals. */
+
+.pay-choice {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin-bottom: 16px;
+}
+
+/* Two cards rather than a dropdown: the amounts are the choice, and a dropdown
+ * hides them behind a label. */
+.pay-option {
+  display: grid;
+  gap: 3px;
+  padding: 13px 15px;
+  border: 1.5px solid rgba(20, 83, 45, 0.18);
+  border-radius: 14px;
+  background: #ffffff;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pay-option--on {
+  border-color: var(--ion-color-primary);
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.pay-option__label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ion-color-medium);
+}
+
+.pay-option__amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--ion-text-color);
+}
+
+.pay-option__note {
+  font-size: 11.5px;
+  color: var(--ion-color-medium);
+}
+
+.pay-accounts {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.pay-account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 15px;
+  border: 1.5px solid rgba(20, 83, 45, 0.18);
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.pay-account--on {
+  border-color: var(--ion-color-primary);
+  background: rgba(34, 197, 94, 0.06);
+}
+
+.pay-account input {
+  flex: 0 0 auto;
+  width: 17px;
+  height: 17px;
+  accent-color: var(--ion-color-primary);
+}
+
+.pay-account__body {
+  flex: 1 1 auto;
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.pay-account__head {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ion-color-medium);
+}
+
+/* Read off the screen and typed into another app, so it is set in a monospace
+ * face at a size that survives a phone. */
+.pay-account__number {
+  font-family: ui-monospace, 'SFMono-Regular', 'Consolas', monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.pay-account__name {
+  font-size: 12.5px;
+}
+
+.pay-account__note {
+  font-size: 11.5px;
+  color: var(--ion-color-medium);
+}
+
+.pay-account__copy {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+@media (max-width: 620px) {
+  .pay-account {
+    flex-wrap: wrap;
+  }
+
+  .pay-account__copy {
+    width: 100%;
+    justify-content: center;
+  }
+}

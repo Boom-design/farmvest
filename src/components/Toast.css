@@ -1,0 +1,72 @@
+/* Success confirmation, shown once per completed write. */
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.toast {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(380px, calc(100vw - 36px));
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(20, 83, 45, 0.18);
+  animation: toast-in 0.22s ease;
+}
+
+.toast__icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+}
+
+.toast__message {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ion-color-dark);
+}
+
+.toast__close {
+  margin-left: auto;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--ion-color-medium);
+  cursor: pointer;
+}
+
+/* On a phone it spans the width instead of hugging the corner. */
+@media (max-width: 575px) {
+  .toast {
+    left: 12px;
+    right: 12px;
+    top: 12px;
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+}

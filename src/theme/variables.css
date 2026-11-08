@@ -1,2 +1,128 @@
-/* For information on how to create your own theme, please refer to:
-http://ionicframework.com/docs/theming/ */
+/* FarmVest theme
+ *
+ * Palette:
+ *   Forest Green  #166534  primary buttons, navbar, headings
+ *   Emerald Green #22C55E  success, active states, positive returns
+ *   Dark Green    #14532D  sidebar/header, strong text
+ *   Gold          #EAB308  investment and profit highlights, icons
+ *   Cream         #F8FAF0  main background
+ *   White         #FFFFFF  cards, forms, panels
+ *   Slate         #475569  secondary text
+ *   Red           #DC2626  loss, rejected, errors
+ *
+ * Every Ionic color needs base/rgb/contrast/shade/tint; the shade and tint
+ * values are the standard Ionic steps (12% darker, 10% lighter).
+ */
+
+:root {
+  /* Forest Green - primary */
+  --ion-color-primary: #166534;
+  --ion-color-primary-rgb: 22, 101, 52;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #13592e;
+  --ion-color-primary-tint: #2d7448;
+
+  /* Gold - secondary, used for investment and profit highlights */
+  --ion-color-secondary: #eab308;
+  --ion-color-secondary-rgb: 234, 179, 8;
+  --ion-color-secondary-contrast: #000000;
+  --ion-color-secondary-contrast-rgb: 0, 0, 0;
+  --ion-color-secondary-shade: #ce9e07;
+  --ion-color-secondary-tint: #ecbb21;
+
+  /* Dark Green - tertiary, used for headers and strong surfaces */
+  --ion-color-tertiary: #14532d;
+  --ion-color-tertiary-rgb: 20, 83, 45;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #124928;
+  --ion-color-tertiary-tint: #2c6442;
+
+  /* Emerald Green - success and positive returns */
+  --ion-color-success: #22c55e;
+  --ion-color-success-rgb: 34, 197, 94;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast-rgb: 0, 0, 0;
+  --ion-color-success-shade: #1ead53;
+  --ion-color-success-tint: #38cb6e;
+
+  /* Gold doubles as the warning color to keep the palette tight */
+  --ion-color-warning: #eab308;
+  --ion-color-warning-rgb: 234, 179, 8;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade: #ce9e07;
+  --ion-color-warning-tint: #ecbb21;
+
+  /* Red - loss, rejected, errors */
+  --ion-color-danger: #dc2626;
+  --ion-color-danger-rgb: 220, 38, 38;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #c22121;
+  --ion-color-danger-tint: #e03c3c;
+
+  /* Slate - secondary text and muted controls */
+  --ion-color-medium: #475569;
+  --ion-color-medium-rgb: 71, 85, 105;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #3e4b5c;
+  --ion-color-medium-tint: #596678;
+
+  /* Cream - page background */
+  --ion-color-light: #f8faf0;
+  --ion-color-light-rgb: 248, 250, 240;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
+  --ion-color-light-shade: #dadcd3;
+  --ion-color-light-tint: #f9fbf2;
+
+  /* Dark Green - strongest surface and text */
+  --ion-color-dark: #14532d;
+  --ion-color-dark-rgb: 20, 83, 45;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #124928;
+  --ion-color-dark-tint: #2c6442;
+
+  /* Application surfaces */
+  --ion-background-color: #f8faf0;
+  --ion-background-color-rgb: 248, 250, 240;
+
+  --ion-text-color: #14532d;
+  --ion-text-color-rgb: 20, 83, 45;
+
+  --ion-card-background: #ffffff;
+  --ion-item-background: #ffffff;
+
+  /* Toolbars use the forest green brand color with white content. */
+  --ion-toolbar-background: #166534;
+  --ion-toolbar-color: #ffffff;
+  --ion-toolbar-segment-color: rgba(255, 255, 255, 0.7);
+  --ion-toolbar-segment-color-checked: #ffffff;
+}
+
+/* Headings sit on the darkest green so they read as brand, not body copy. */
+h1,
+h2,
+h3,
+h4 {
+  color: var(--ion-color-dark);
+}
+
+/* Slate is the muted/secondary text color across the app. */
+.text-secondary,
+ion-note,
+ion-card-subtitle {
+  color: var(--ion-color-medium);
+}
+
+/* The area the routed page fills, beside the sidebar on wide screens. Pages
+ * are IonPage elements, which fill their positioned parent. */
+.app-main {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}

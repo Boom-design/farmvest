@@ -1,0 +1,31 @@
+/* Illustrated empty state, used where a screen legitimately has no rows yet. */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 18px 16px 24px;
+  text-align: center;
+}
+
+.empty-state__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.empty-state__message {
+  margin: 4px 0 0;
+  max-width: 420px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ion-color-medium);
+}
+
+/* The dropdown is a narrow panel, so its copy sits tighter. */
+.notif__list .empty-state {
+  padding: 6px 10px 14px;
+}

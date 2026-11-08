@@ -1,0 +1,106 @@
+.verify {
+  display: grid;
+  gap: 20px;
+}
+
+.verify__intro {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+}
+
+.verify__intro ion-icon {
+  flex: 0 0 auto;
+  font-size: 26px;
+  color: var(--ion-color-primary);
+}
+
+.verify__title {
+  margin: 0 0 4px;
+  font-size: 19px;
+  font-weight: 700;
+  color: #0f2e1c;
+}
+
+.verify__lead {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #64748b;
+}
+
+.verify__step {
+  display: grid;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--dash-line, #e2e8f0);
+}
+
+.verify__step-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ion-color-primary);
+}
+
+/* ---------------------------------------------------------------------------
+ * The outcome
+ *
+ * Three results, three colours, and in every case a sentence saying what
+ * happens next. A borderline score is the commonest one and is not the user's
+ * fault, so it does not read like a failure.
+ * ------------------------------------------------------------------------- */
+
+.verify-result {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 28px 20px;
+}
+
+.verify-result ion-icon {
+  font-size: 54px;
+}
+
+.verify-result--approved ion-icon {
+  color: #22c55e;
+}
+
+.verify-result--flagged ion-icon {
+  color: #eab308;
+}
+
+.verify-result--rejected ion-icon {
+  color: #ef4444;
+}
+
+.verify-result__title {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+  color: #0f2e1c;
+}
+
+.verify-result__body {
+  margin: 0;
+  max-width: 46ch;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #475569;
+}
+
+.verify-result__score {
+  margin: 0;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.verify-result .dash-btn {
+  margin-top: 8px;
+  min-width: 180px;
+  justify-content: center;
+}

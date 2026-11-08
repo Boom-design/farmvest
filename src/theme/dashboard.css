@@ -1,0 +1,2058 @@
+/* Shared dashboard building blocks: stat tiles, panels, tables, status pills. */
+
+.dash-content {
+  --background: var(--ion-background-color);
+}
+
+.dash-page {
+  padding: 20px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* ---------- layout ---------- */
+
+.dash-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+/* Three per row, so six tiles fill two complete rows with no gap at the end.
+ * auto-fit was leaving a ragged last row on wide screens. */
+.dash-grid--stats {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 700px) {
+  .dash-grid--stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .dash-grid--stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dash-columns {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+  margin-top: 16px;
+}
+
+/* A grid child defaults to min-width: auto, so a wide table or an unbroken
+   title in one column pushed the other column past the page edge. Letting
+   both shrink keeps them inside, and the table scrolls within its own box. */
+.dash-columns > * {
+  min-width: 0;
+}
+
+/* In the narrow column the page count takes its own line above the buttons. */
+.dash-columns .dash-pager__count {
+  flex-basis: 100%;
+  text-align: right;
+}
+
+@media (min-width: 992px) {
+  .dash-columns {
+    grid-template-columns: 2fr 1fr;
+    align-items: start;
+  }
+}
+
+/* ---------- cards ---------- */
+
+.dash-card {
+  background: var(--ion-card-background);
+  border: 1px solid rgba(20, 83, 45, 0.08);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 1px 2px rgba(20, 83, 45, 0.04);
+}
+
+.dash-stat {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.dash-stat__icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.dash-stat__icon--green {
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--ion-color-primary);
+}
+
+.dash-stat__icon--gold {
+  background: rgba(234, 179, 8, 0.15);
+  color: #a16207;
+}
+
+.dash-stat__icon--slate {
+  background: rgba(71, 85, 105, 0.12);
+  color: var(--ion-color-medium);
+}
+
+.dash-stat__icon--red {
+  background: rgba(220, 38, 38, 0.12);
+  color: var(--ion-color-danger);
+}
+
+.dash-stat__label {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ion-color-medium);
+}
+
+.dash-stat__value {
+  margin: 2px 0 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.dash-stat__hint {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--ion-color-medium);
+}
+
+/* ---------- panels ---------- */
+
+.dash-panel {
+  background: var(--ion-card-background);
+  border: 1px solid rgba(20, 83, 45, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.dash-panel + .dash-panel {
+  margin-top: 16px;
+}
+
+.dash-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(20, 83, 45, 0.08);
+}
+
+.dash-panel__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.dash-panel__heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Trend badge beside a panel title. Rendered only when there is a previous month
+ * to compare against, so an empty system shows no arrow at all. */
+.dash-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.dash-trend ion-icon {
+  font-size: 13px;
+}
+
+.dash-trend--up {
+  background: rgba(34, 197, 94, 0.15);
+  color: #15803d;
+}
+
+.dash-trend--down {
+  background: rgba(220, 38, 38, 0.12);
+  color: var(--ion-color-danger);
+}
+
+
+
+.dash-panel__link {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+  cursor: pointer;
+}
+
+.dash-panel__body {
+  padding: 8px 18px 18px;
+}
+
+/* ---------- tables ---------- */
+
+.dash-table-wrap {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+
+  /* Two pairs of layers: a card-coloured fade pinned to the content
+   * (background-attachment: local) and a shadow pinned to the container. Where
+   * the content is scrolled away from an edge the fade moves off and the shadow
+   * shows, so a shadow on the right means there are more columns that way, and
+   * it disappears once the last one is reached. */
+  background:
+    linear-gradient(to right, var(--ion-card-background) 30%, rgba(255, 255, 255, 0)) left center,
+    linear-gradient(to left, var(--ion-card-background) 30%, rgba(255, 255, 255, 0)) right center,
+    radial-gradient(farthest-side at 0 50%, rgba(20, 83, 45, 0.16), rgba(20, 83, 45, 0)) left center,
+    radial-gradient(farthest-side at 100% 50%, rgba(20, 83, 45, 0.16), rgba(20, 83, 45, 0)) right
+      center;
+  background-repeat: no-repeat;
+  background-size: 34px 100%, 34px 100%, 13px 100%, 13px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+
+/* Left visible rather than overlaid: the bar itself is what says the table
+ * slides sideways. */
+.dash-table-wrap::-webkit-scrollbar {
+  height: 8px;
+}
+
+.dash-table-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dash-table-wrap::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(20, 83, 45, 0.28);
+}
+
+@supports (scrollbar-width: thin) {
+  .dash-table-wrap {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(20, 83, 45, 0.28) transparent;
+  }
+}
+
+.dash-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 560px;
+}
+
+.dash-table th {
+  text-align: left;
+  padding: 12px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--ion-color-medium);
+  border-bottom: 1px solid rgba(20, 83, 45, 0.08);
+  white-space: nowrap;
+}
+
+.dash-table td {
+  padding: 14px 10px;
+  border-bottom: 1px solid rgba(20, 83, 45, 0.06);
+  color: var(--ion-color-dark);
+  vertical-align: middle;
+}
+
+.dash-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.dash-table__muted {
+  color: var(--ion-color-medium);
+  font-size: 13px;
+}
+
+/* ---------- pills and small buttons ---------- */
+
+.dash-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dash-pill--success {
+  background: rgba(34, 197, 94, 0.15);
+  color: #15803d;
+}
+
+.dash-pill--gold {
+  background: rgba(234, 179, 8, 0.18);
+  color: #a16207;
+}
+
+.dash-pill--slate {
+  background: rgba(71, 85, 105, 0.12);
+  color: var(--ion-color-medium);
+}
+
+.dash-pill--danger {
+  background: rgba(220, 38, 38, 0.12);
+  color: var(--ion-color-danger);
+}
+
+.dash-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.dash-btn {
+  border: 0;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dash-btn--primary {
+  background: var(--ion-color-primary);
+  color: #ffffff;
+}
+
+.dash-btn--ghost {
+  background: #ffffff;
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  color: var(--ion-color-danger);
+}
+
+/* ---------- simple list rows ---------- */
+
+.dash-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(20, 83, 45, 0.06);
+}
+
+.dash-row:last-child {
+  border-bottom: 0;
+}
+
+.dash-row__icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.dash-row__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ion-color-dark);
+}
+
+.dash-row__meta {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--ion-color-medium);
+}
+
+.dash-row__trailing {
+  margin-left: auto;
+  text-align: right;
+  font-size: 12px;
+  color: var(--ion-color-medium);
+  white-space: nowrap;
+}
+
+/* ---------- progress bar ---------- */
+
+.dash-progress {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(20, 83, 45, 0.1);
+  overflow: hidden;
+  min-width: 90px;
+}
+
+.dash-progress__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ion-color-primary);
+}
+
+.dash-note {
+  margin: 16px 0 0;
+  font-size: 12px;
+  color: var(--ion-color-medium);
+  text-align: center;
+}
+
+/* ---------- toolbars, filters and forms on the admin pages ---------- */
+
+.dash-toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.dash-tab {
+  border: 1px solid rgba(20, 83, 45, 0.15);
+  background: #ffffff;
+  color: var(--ion-color-medium);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dash-tab--active {
+  background: var(--ion-color-primary);
+  border-color: var(--ion-color-primary);
+  color: #ffffff;
+}
+
+.dash-spacer {
+  margin-left: auto;
+}
+
+.dash-form {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  align-items: end;
+}
+
+/* Two columns that stay two columns. The auto-fit default collapses a pair of
+ * fields into one column inside a narrow modal, which reads as a mistake when
+ * the two belong together. */
+.dash-form--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dash-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dash-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ion-color-medium);
+}
+
+.dash-input,
+.dash-select,
+.dash-textarea {
+  width: 100%;
+  border: 1px solid rgba(20, 83, 45, 0.18);
+  border-radius: 8px;
+  padding: 9px 10px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ion-color-dark);
+  background: #ffffff;
+}
+
+.dash-input:focus,
+.dash-select:focus,
+.dash-textarea:focus {
+  outline: 2px solid rgba(22, 101, 52, 0.25);
+  border-color: var(--ion-color-primary);
+}
+
+.dash-textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+.dash-btn--slate {
+  background: #ffffff;
+  border: 1px solid rgba(20, 83, 45, 0.2);
+  color: var(--ion-color-medium);
+}
+
+.dash-btn--gold {
+  background: var(--ion-color-secondary);
+  color: #3f2d00;
+}
+
+.dash-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.dash-error {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  color: var(--ion-color-danger);
+  font-size: 13px;
+}
+
+.dash-loading {
+  display: grid;
+  place-items: center;
+  padding: 40px 0;
+}
+
+/* Written last and with an element prefix so it outranks the full-width rule
+ * that .dash-select carries for form layouts. */
+select.dash-select--compact {
+  width: auto;
+  min-width: 96px;
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---------- account profile hero ---------- */
+
+.account-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.account-hero__avatar {
+  font-size: 64px;
+  color: var(--ion-color-primary);
+  flex-shrink: 0;
+}
+
+.account-hero__identity {
+  flex: 1 1 240px;
+}
+
+.account-hero__name {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.account-hero__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: var(--ion-color-medium);
+}
+
+.account-hero__meta ion-icon {
+  font-size: 15px;
+}
+
+.account-hero__badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* ---------- farm owner pages ---------- */
+
+/* Sits outside the auto-fit grid, so a description spans the whole panel. */
+.dash-field--full {
+  margin-top: 12px;
+}
+
+.dash-actions--end {
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.dash-field-label {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ion-color-medium);
+}
+
+/* Equipment tiles and progress photos share one responsive card grid. */
+.dash-cards {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  padding-top: 8px;
+}
+
+.dash-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.dash-card__price {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.dash-card__price span {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ion-color-medium);
+}
+
+.dash-card__photo {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.dash-btn--block {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+}
+
+/* File picker styled as a drop zone; the real input stays hidden. */
+.dash-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px dashed rgba(20, 83, 45, 0.35);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--ion-color-medium);
+  cursor: pointer;
+  background: #ffffff;
+}
+
+.dash-upload ion-icon {
+  font-size: 18px;
+  color: var(--ion-color-primary);
+}
+
+/* The booking step: calendar on the left, what it adds up to on the right. */
+
+.booking-dates {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.booking-dates__summary {
+  padding: 16px;
+  border: 1px solid var(--dash-line, #e2e8f0);
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.booking-dates__range {
+  margin: 6px 0 2px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f2e1c;
+}
+
+.booking-dates__total-label {
+  margin-top: 14px;
+}
+
+@media (max-width: 720px) {
+  .booking-dates {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- notification rows ---------- */
+
+/* Same look as .dash-row, but the whole row is the target that opens the page
+ * the notification points at. */
+.dash-row--button {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid rgba(20, 83, 45, 0.06);
+  background: transparent;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  align-items: flex-start;
+}
+
+.dash-row--button:last-child {
+  border-bottom: 0;
+}
+
+.dash-row--button:hover {
+  background: rgba(20, 83, 45, 0.04);
+}
+
+.dash-row__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.dash-row__text .dash-row__title,
+.dash-row__text .dash-row__meta {
+  display: block;
+}
+
+/* ---------- toolbar search ---------- */
+
+.dash-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 240px;
+  max-width: 320px;
+  padding: 0 12px;
+  border: 1px solid rgba(20, 83, 45, 0.18);
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.dash-search:focus-within {
+  border-color: var(--ion-color-primary);
+  outline: 2px solid rgba(22, 101, 52, 0.18);
+}
+
+.dash-search ion-icon {
+  font-size: 17px;
+  color: var(--ion-color-medium);
+  flex-shrink: 0;
+}
+
+.dash-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  padding: 9px 0;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ion-color-dark);
+}
+
+/* The empty-state cell spans the whole table, so it must not inherit the row
+ * padding that would push the message off centre. */
+.dash-table td > .dash-empty {
+  margin: 0;
+}
+
+/* ---------- reports ---------- */
+
+.dash-table__totals td {
+  border-top: 2px solid rgba(20, 83, 45, 0.15);
+  font-weight: 700;
+  color: var(--ion-color-dark);
+  white-space: nowrap;
+}
+
+/* The case file sits above the case list, so it needs to read as one block. */
+.case-panel {
+  border-color: rgba(234, 179, 8, 0.45);
+  margin-bottom: 16px;
+}
+
+.case-panel__pill {
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.case-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .case-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.case-grid .dash-row__meta ion-icon {
+  vertical-align: -2px;
+}
+
+/* ---------- equipment photos ---------- */
+
+.equipment-photo-picker {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.equipment-photo-picker > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.equipment-photo-picker__preview,
+.equipment-photo-picker__empty {
+  width: 108px;
+  height: 108px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.equipment-photo-picker__empty {
+  display: grid;
+  place-items: center;
+  background: rgba(20, 83, 45, 0.06);
+  color: var(--ion-color-medium);
+  font-size: 30px;
+}
+
+.equipment-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  object-fit: cover;
+  display: block;
+}
+
+.equipment-thumb--empty {
+  display: grid;
+  place-items: center;
+  background: rgba(20, 83, 45, 0.06);
+  color: var(--ion-color-medium);
+  font-size: 20px;
+}
+
+/* Same box as a real photo, so a card with no picture keeps its shape. */
+.dash-card__photo--empty {
+  display: grid;
+  place-items: center;
+  background: rgba(20, 83, 45, 0.06);
+  color: var(--ion-color-medium);
+  font-size: 34px;
+}
+
+/* ---------- contracts ---------- */
+
+.contract-box {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid rgba(20, 83, 45, 0.18);
+  border-radius: 12px;
+  background: #fbfdf6;
+}
+
+.contract-box__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+/* The agreement is stored and shown as plain text, so it reads the same way it
+ * was signed. */
+.contract-box__terms {
+  max-height: 320px;
+  overflow-y: auto;
+  margin: 0 0 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid rgba(20, 83, 45, 0.12);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ion-color-dark);
+  white-space: pre-wrap;
+}
+
+.contract-box__signature {
+  font-family: 'Segoe Script', 'Brush Script MT', cursive;
+  font-size: 18px;
+}
+
+.contract-box__agree {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--ion-color-dark);
+  cursor: pointer;
+}
+
+/* Locked until the full terms have been opened. */
+.contract-box__agree--locked {
+  color: #8a948e;
+  cursor: not-allowed;
+}
+
+.contract-box__hint {
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #a16207;
+}
+
+.contract-box__agree input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--ion-color-primary);
+}
+
+/* ---------- overlay panel ---------- */
+
+/* A plain fixed overlay rather than IonModal, for the same reason the sidebar
+ * is not an IonMenu: Ionic decides on its own when an overlay is presented and
+ * how it animates, and this one only ever needs to sit over the current page. */
+.dash-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.dash-modal__panel {
+  display: flex;
+  flex-direction: column;
+  width: min(720px, 100%);
+  max-height: min(88vh, 900px);
+  border-radius: 18px;
+  background: var(--ion-card-background);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.3);
+  overflow: hidden;
+}
+
+.dash-modal__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(20, 83, 45, 0.1);
+}
+
+.dash-modal__eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ion-color-medium);
+}
+
+.dash-modal__title {
+  margin: 3px 0 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.dash-modal__tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dash-modal__tools .dash-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.dash-modal__close {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(71, 85, 105, 0.1);
+  color: var(--ion-color-medium);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.dash-modal__close:hover {
+  background: rgba(71, 85, 105, 0.18);
+}
+
+/* The document decides the height up to the panel's cap, and scrolls past it. */
+.dash-modal__body {
+  flex: 1 1 auto;
+  min-height: 220px;
+  overflow: auto;
+  padding: 16px 18px;
+  background: rgba(15, 23, 42, 0.04);
+}
+
+.dash-modal__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* A PDF has no intrinsic height to grow to, so it is given one. */
+.dash-modal__frame {
+  display: block;
+  width: 100%;
+  height: 62vh;
+  border: 0;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+/* A field that still needs filling: red edge and the reason right below it. */
+.dash-required {
+  color: #b91c1c;
+}
+
+.dash-input--invalid,
+.dash-upload--invalid {
+  border-color: #dc2626 !important;
+  background: #fef2f2;
+}
+
+.dash-field__error {
+  margin: 6px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #b91c1c;
+}
+
+/* Page controls under a table. Many pages wrap rather than scroll sideways. */
+.dash-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 12px 0 4px;
+}
+
+.dash-pager .dash-btn {
+  min-width: 38px;
+  justify-content: center;
+}
+
+.dash-pager__count {
+  margin-right: auto;
+  font-size: 13px;
+  color: var(--ion-color-medium);
+}
+
+/* Frame tabs under a paged image: previous, one button per frame, next. */
+.dash-modal__pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 18px 0;
+}
+
+.dash-modal__note {
+  margin: 0;
+  padding: 10px 18px 14px;
+  font-size: 11px;
+  color: var(--ion-color-medium);
+}
+
+@media (max-width: 620px) {
+  .dash-modal {
+    padding: 12px;
+  }
+
+  .dash-modal__panel {
+    max-height: 92vh;
+  }
+
+  .dash-modal__frame {
+    height: 56vh;
+  }
+}
+
+/* A dialog that asks for something, rather than one that shows a document. */
+.dash-modal__panel--narrow {
+  width: min(480px, 100%);
+}
+
+.dash-modal__body--form {
+  background: var(--ion-card-background);
+}
+
+.dash-modal__lead {
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ion-color-medium);
+}
+
+.dash-reason-picks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.dash-reason-picks .dash-tab {
+  font-size: 12px;
+  padding: 5px 11px;
+  text-align: left;
+}
+
+.dash-modal__foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 14px 18px;
+  border-top: 1px solid rgba(20, 83, 45, 0.1);
+}
+
+/* A form with eight fields and a photo picker needs the room; the reading
+ * width that suits a document is too narrow to lay it out in two columns. */
+.dash-modal__panel--wide {
+  width: min(920px, 100%);
+}
+
+
+/* File picker for a form on a dashboard page, matching the one the sign-up
+ * form uses without pulling that stylesheet in. */
+.dash-upload {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 13px;
+  border: 1.5px dashed rgba(20, 83, 45, 0.3);
+  border-radius: 10px;
+  background: rgba(34, 197, 94, 0.04);
+  font-size: 13px;
+  color: var(--ion-color-medium);
+  cursor: pointer;
+}
+
+.dash-upload:hover {
+  border-color: var(--ion-color-primary);
+}
+
+.dash-upload ion-icon {
+  flex: 0 0 auto;
+  font-size: 19px;
+  color: var(--ion-color-primary);
+}
+
+.dash-upload span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+ * Supporting documents
+ *
+ * One row that picks a type and a file, then a list of what is attached. A
+ * repeating picker rather than a fixed field per document type: farm photos
+ * come in threes and fours, and most farm owners hold only one or two of the
+ * five credential documents.
+ * ------------------------------------------------------------------------- */
+
+/* One row per document: a label, a type, and the file filed under it.
+ *
+ * Rows rather than a picker feeding a list below. A picker asks "add another
+ * thing", which suits photos and suits a requirement badly: the farm owner
+ * cannot see how many slots they have or which are still empty. A row that
+ * exists before its file does shows the shape of what is being asked for.
+ */
+
+.doc-rows {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.doc-row {
+  padding: 14px 16px;
+  border: 1px solid var(--dash-line, #e2e8f0);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.doc-row__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.doc-row__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ion-color-primary);
+}
+
+.doc-row__body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.doc-row__body .dash-select {
+  flex: 0 1 280px;
+}
+
+/* The file name is the part that runs long, so the control truncates rather
+ * than pushing the row onto three lines. */
+.doc-row__body .dash-upload {
+  flex: 1 1 220px;
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.doc-row__body .dash-upload span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Adds one more row. Reads as an action rather than a drop zone, because two
+ * documents is the minimum and not the limit. */
+
+.doc-picker__add {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 18px;
+  border: 1px dashed var(--ion-color-primary);
+  border-radius: 10px;
+  background: rgba(22, 101, 52, 0.06);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+  cursor: pointer;
+}
+
+.doc-picker__add:hover {
+  background: rgba(22, 101, 52, 0.12);
+}
+
+.doc-picker__add ion-icon {
+  font-size: 18px;
+}
+
+.doc-list__remove {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.doc-list__remove:hover {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.doc-list__remove ion-icon {
+  font-size: 18px;
+  color: inherit;
+}
+
+/* ---------------------------------------------------------------------------
+ * Admin document review
+ * ------------------------------------------------------------------------- */
+
+.doc-review {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.doc-review__group {
+  margin: 14px 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ion-color-primary);
+}
+
+.doc-review__group:first-child {
+  margin-top: 0;
+}
+
+.doc-review__empty {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px dashed #e2e8f0;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #b45309;
+  background: #fffbeb;
+}
+
+/* A running tally of what the submission still needs. Stated as a checklist
+ * rather than a paragraph: a failed submission is almost always one missing
+ * document, not a misunderstanding of the rule. */
+
+.doc-check {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.doc-check__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.doc-check__item ion-icon {
+  font-size: 18px;
+  color: #cbd5e1;
+  flex: 0 0 auto;
+}
+
+.doc-check__item--done {
+  color: #166534;
+}
+
+.doc-check__item--done ion-icon {
+  color: #22c55e;
+}
+
+.doc-check__item small {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+/* A modal opened from inside another one. The document viewer sits over the
+ * project review rather than replacing it, so the Admin keeps their place in
+ * the file list and whatever they had already typed. */
+
+.dash-modal--stacked {
+  z-index: 3100;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+
+/* ---------------------------------------------------------------------------
+ * Dashboard view switch
+ *
+ * One account farms and invests, and the two sets of figures do not add up
+ * together: money raised and money invested move in opposite directions. So
+ * they stay two views behind this switch rather than one long screen.
+ * ------------------------------------------------------------------------- */
+
+.dash-switch-row {
+  display: flex;
+  gap: 6px;
+  padding: 16px 24px 0;
+}
+
+.dash-switch {
+  padding: 8px 20px;
+  border: 1px solid var(--dash-line, #e2e8f0);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.dash-switch--active {
+  border-color: transparent;
+  background: var(--ion-color-primary);
+  color: #fff;
+}
+
+@media (max-width: 620px) {
+  .dash-switch-row {
+    padding: 12px 16px 0;
+  }
+}
+
+/* A prompt, not an error. Says what is missing and where to fix it, without
+ * stopping the work in hand. */
+
+.dash-notice {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #eab308;
+  border-radius: 10px;
+  background: #fffbeb;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #78350f;
+}
+
+/* ---------------------------------------------------------------------------
+ * Form sections inside a modal
+ *
+ * A long form reads as a wall unless it is grouped, and the groups have to be
+ * visible or they are not groups. Each section carries a heading and a rule,
+ * and every control inside lines up on the same left edge and the same top.
+ * ------------------------------------------------------------------------- */
+
+.form-section {
+  display: grid;
+  gap: 14px;
+  padding-bottom: 22px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--dash-line, #e2e8f0);
+}
+
+.form-section:last-of-type {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.form-section__title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ion-color-primary);
+}
+
+.form-section__lead,
+.form-section__note {
+  margin: 0;
+  max-width: 74ch;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #64748b;
+}
+
+/* The lead sits under the heading, so the gap above it is the section's own. */
+.form-section__lead {
+  margin-top: -4px;
+}
+
+/* Fields in a two-column row align on their labels rather than their inputs.
+ * With bottom alignment a field carrying a hint pushes its input up and out of
+ * line with the one beside it. */
+.dash-form--two {
+  align-items: start;
+}
+
+.doc-rows__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+/* The face match score in the flagged-account table. A weak score is the case
+ * the Admin is here to look at, so it is coloured; a middling one is not. */
+
+.match-score {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f2e1c;
+}
+
+.match-score--weak {
+  color: #b91c1c;
+}
+
+/* An error inside a scrolling modal body.
+ *
+ * It was printed at the top of a tall form whose Submit button is at the
+ * bottom, so a failed validation explained itself three hundred pixels above
+ * the fold. Sticky keeps it in sight while the customer fixes the field it is
+ * about. */
+
+.dash-error--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 12px -8px rgba(15, 23, 42, 0.35);
+}
+
+/* ---------------------------------------------------------------------------
+ * Documents in the admin review
+ *
+ * Cards with their own preview, not a list of file names. A list made the
+ * reviewer open six dialogs to answer one question; the point of the review is
+ * to look at the documents, so the documents are what is on screen.
+ * ------------------------------------------------------------------------- */
+
+.doc-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.doc-card {
+  border: 1px solid var(--dash-line, #e2e8f0);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* The whole thumbnail opens the full-size view, so a reviewer can click the
+ * thing they are looking at rather than hunt for a button. */
+.doc-card__art {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 0;
+  padding: 0;
+  background: #f1f5f4;
+  cursor: zoom-in;
+}
+
+.doc-card__art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.doc-card__pdf {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #64748b;
+}
+
+.doc-card__pdf ion-icon {
+  font-size: 32px;
+  color: var(--ion-color-primary);
+}
+
+.doc-card__foot {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+}
+
+.doc-card__text {
+  min-width: 0;
+}
+
+.doc-card__type {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f2e1c;
+}
+
+/* The file name is the part that runs long. */
+.doc-card__text .dash-row__meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.doc-card__open {
+  justify-content: center;
+  width: 100%;
+}
+
+/* The RSBSA panel in the admin review.
+ *
+ * The detail and the finder link were in a flex row with no structure, so the
+ * reference line and the button ran together into one string of text. Two
+ * columns on a wide panel, stacked on a narrow one, with the labels carrying
+ * their own values. */
+
+.rsbsa-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--dash-line, #e2e8f0);
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.rsbsa-panel__detail {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* Space above each label but the first, so the two pairs read as pairs. */
+.rsbsa-panel__detail .doc-card__type + * {
+  margin-bottom: 8px;
+}
+
+.rsbsa-panel__detail .doc-card__type:not(:first-child) {
+  margin-top: 4px;
+}
+
+.rsbsa-panel__name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f2e1c;
+}
+
+.rsbsa-panel__link {
+  flex: 0 0 auto;
+}
+
+/* The live funding ceiling, under the goal it limits.
+ *
+ * Shown while the goal is being typed rather than enforced only on submit: a
+ * farm owner refused after the fact has no idea what to change, and the answer
+ * is usually "attach one more paper" rather than "ask for less". */
+
+.cap-note {
+  padding: 12px 14px;
+  border: 1px solid var(--dash-line, #e2e8f0);
+  border-left: 4px solid var(--ion-color-primary);
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.cap-note__figure {
+  margin: 0;
+  font-size: 13px;
+  color: #475569;
+}
+
+.cap-note__figure strong {
+  font-size: 16px;
+  color: #0f2e1c;
+}
+
+.cap-note__advice {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+/* The frames already taken, so the sequence shows its own progress. */
+
+.face-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.face-strip__shot {
+  margin: 0;
+  border: 1px solid var(--dash-line, #e2e8f0);
+  border-radius: 9px;
+  overflow: hidden;
+  background: #f1f5f4;
+}
+
+.face-strip__shot img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+}
+
+.face-strip__shot figcaption {
+  padding: 4px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+/* The liveness frames inside a table cell. Narrower than the capture strip,
+ * because a table column has less room than a modal. */
+
+.face-strip--review {
+  margin-top: 10px;
+  max-width: 320px;
+  gap: 4px;
+}
+
+.face-strip--review .face-strip__shot figcaption {
+  font-size: 9px;
+}
+
+/* The offer and the pledged asset. Shared by the invest modal and the admin
+ * review, so they live here rather than in either page. */
+
+.invest-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  background: #f1f5f4;
+}
+
+.invest-summary__value {
+  margin: 2px 0 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f2e1c;
+}
+
+.invest-security {
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border: 1px solid var(--dash-line, #e2e8f0);
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.invest-security__asset {
+  margin: 4px 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f2e1c;
+}
+
+
+/* The progress the Admin is releasing against: photo beside date, notes, map. */
+.release-evidence {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin: 12px 0;
+  padding: 10px;
+  border: 1px solid rgba(20, 83, 45, 0.15);
+  border-radius: 10px;
+  background: #f7faf7;
+}
+
+.release-evidence__photo {
+  width: 110px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* One progress update in a review list: photo, project, date and map, notes. */
+.progress-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(20, 83, 45, 0.08);
+}
+
+.progress-item:last-of-type {
+  border-bottom: 0;
+}
+
+.progress-item__photo {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #eef4ee;
+}
+
+.progress-item__photo--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--ion-color-primary);
+}
+
+.progress-item__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.progress-item__title {
+  margin: 0 0 2px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress-item__meta {
+  margin: 0 0 4px;
+  font-size: 12px;
+  color: var(--ion-color-medium);
+}
+
+.progress-item__meta a {
+  color: var(--ion-color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.progress-item__meta ion-icon {
+  vertical-align: -2px;
+}
+
+/* Long notes stop at two lines so every item is the same height. */
+.progress-item__notes {
+  margin: 0;
+  font-size: 13px;
+  color: #3f4a3f;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* The routes to a goal above the ceiling, one per line. */
+.cap-note__needed {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(180, 83, 9, 0.35);
+}
+
+.cap-note__needed ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+.cap-note__needed li {
+  margin-bottom: 4px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* The cost estimate: item and amount per line, with a running total. */
+.budget {
+  margin: 14px 0;
+  padding: 14px;
+  border: 1px solid rgba(20, 83, 45, 0.15);
+  border-radius: 12px;
+  background: #fafcfa;
+}
+
+.budget__title {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.budget__row {
+  display: grid;
+  grid-template-columns: 1fr 140px auto;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+@media (max-width: 620px) {
+  .budget__row {
+    grid-template-columns: 1fr 110px;
+  }
+
+  .budget__row .dash-btn {
+    grid-column: 1 / -1;
+  }
+}
+
+.budget__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.budget__total {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ion-color-primary);
+}
+
+.budget__total--off {
+  color: #b91c1c;
+}
+
+/* What does not add up in a liquidation, for the Admin to ask about. */
+.liq-flags {
+  margin: 12px 0;
+  padding: 10px 12px 10px 28px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 13px;
+}
+
+.liq-flags li {
+  margin-bottom: 4px;
+}
+
+/* A project's budget beside what its harvest is expected to bring. */
+.estimate-card {
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid rgba(20, 83, 45, 0.15);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.estimate-card__label {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ion-color-medium);
+}
+
+.estimate-card__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.estimate-card__sub {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.estimate-card__table {
+  min-width: 0;
+  font-size: 13px;
+}
+
+.estimate-card__table td {
+  padding: 6px 4px;
+}
+
+.estimate-card__table td:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.estimate-card__margin {
+  margin: 8px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+}
+
+.estimate-card__margin--short {
+  color: #b45309;
+}
+
+/* A completed project's result for its farm owner, line by line. */
+.result-cell p {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.result-cell .dash-row__title {
+  margin-top: 4px;
+  color: var(--ion-color-primary);
+}
+
+.result-cell__loss {
+  color: #b91c1c !important;
+}
+
+/* Liquidation receipts, as thumbnails that open full size. */
+.receipt-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 8px 0 12px;
+}
+
+.receipt-grid__photo {
+  display: block;
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e6eae4;
+}
+
+.receipt-grid__file {
+  display: grid;
+  place-items: center;
+  width: 110px;
+  height: 110px;
+  border-radius: 8px;
+  border: 1px solid #e6eae4;
+  font-size: 12px;
+  font-weight: 600;
+  color: #166534;
+  text-decoration: none;
+}

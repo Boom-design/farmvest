@@ -1,0 +1,110 @@
+/* Chart chrome: recessive grid and axes, ink-coloured text, marks carry identity. */
+
+.chart {
+  position: relative;
+  width: 100%;
+}
+
+.chart__canvas {
+  position: relative;
+}
+
+.chart__grid {
+  stroke: rgba(20, 83, 45, 0.1);
+  stroke-width: 1;
+}
+
+.chart__track {
+  fill: rgba(20, 83, 45, 0.07);
+}
+
+.chart__tick,
+.chart__label {
+  font-size: 11px;
+  fill: var(--ion-color-medium);
+  font-family: inherit;
+}
+
+.chart__value {
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--ion-color-dark);
+  font-family: inherit;
+}
+
+.chart__legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--ion-color-medium);
+}
+
+.chart__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chart__swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.chart__toggle {
+  margin-left: auto;
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+  cursor: pointer;
+}
+
+.chart__tooltip {
+  position: absolute;
+  top: 8px;
+  transform: translateX(-50%);
+  min-width: 170px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid rgba(20, 83, 45, 0.12);
+  box-shadow: 0 6px 18px rgba(20, 83, 45, 0.14);
+  font-size: 12px;
+  color: var(--ion-color-medium);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.chart__tooltip p {
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chart__tooltip-title {
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.chart__tooltip-total {
+  margin: 6px 0 0;
+  padding-top: 6px;
+  border-top: 1px solid rgba(20, 83, 45, 0.1);
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.chart__empty {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--ion-color-medium);
+}

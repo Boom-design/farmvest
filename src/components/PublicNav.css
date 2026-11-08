@@ -1,0 +1,206 @@
+/* The public header.
+ *
+ * Fixed to the top because the landing page is one long scroll and the links
+ * are anchors into it; a bar that scrolled away would strand a visitor halfway
+ * down. It starts transparent over the hero and earns a background only once
+ * the page has moved under it.
+ */
+
+.pubnav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  background: transparent;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pubnav--scrolled {
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(20, 83, 45, 0.12);
+}
+
+.pubnav__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* --- brand ------------------------------------------------------------- */
+
+.pubnav__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.pubnav__logo {
+  width: auto;
+  height: 46px;
+  object-fit: contain;
+}
+
+.pubnav__name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #14532d;
+}
+
+.pubnav__name span {
+  color: #eab308;
+}
+
+/* --- links ------------------------------------------------------------- */
+
+.pubnav__links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pubnav__link {
+  background: none;
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.pubnav__link:hover {
+  background: rgba(22, 101, 52, 0.08);
+  color: #166534;
+}
+
+.pubnav__cta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 12px;
+}
+
+.pubnav__btn {
+  border-radius: 999px;
+  padding: 9px 20px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.pubnav__btn:active {
+  transform: scale(0.97);
+}
+
+.pubnav__btn--ghost {
+  background: transparent;
+  border: 1.5px solid #166534;
+  color: #166534;
+}
+
+.pubnav__btn--ghost:hover {
+  background: rgba(22, 101, 52, 0.08);
+}
+
+.pubnav__btn--solid {
+  background: #166534;
+  border: 1.5px solid #166534;
+  color: #ffffff;
+}
+
+.pubnav__btn--solid:hover {
+  background: #14532d;
+}
+
+/* --- burger ------------------------------------------------------------ */
+
+.pubnav__burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  padding: 0 9px;
+  background: #ffffff;
+  border: 1px solid #dbe5d8;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.pubnav__burger span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: #14532d;
+}
+
+/* --- phone ------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .pubnav {
+    /* The sheet below is opaque, so the bar it hangs from has to be too. */
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(20, 83, 45, 0.12);
+  }
+
+  .pubnav__logo {
+    height: 40px;
+  }
+
+  .pubnav__burger {
+    display: flex;
+  }
+
+  .pubnav__links {
+    position: absolute;
+    top: 68px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    padding: 12px 20px 20px;
+    background: #ffffff;
+    border-top: 1px solid #eef2e9;
+    box-shadow: 0 12px 24px rgba(20, 83, 45, 0.12);
+
+    /* Closed by default on a phone; --open is the only thing that shows it. */
+    display: none;
+  }
+
+  .pubnav__links--open {
+    display: flex;
+  }
+
+  .pubnav__link {
+    text-align: left;
+    padding: 12px 14px;
+    font-size: 1rem;
+  }
+
+  .pubnav__cta {
+    margin: 8px 0 0;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pubnav__btn {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+}

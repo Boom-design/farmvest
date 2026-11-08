@@ -1,0 +1,306 @@
+/* Weather Advisory. Everything structural comes from theme/dashboard.css; this
+ * file adds the two things that screen has no equivalent for: the advisory
+ * banner and the seven-day strip. */
+
+/* ---------- advisory banner ---------- */
+
+.wx-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  padding: 20px;
+  margin-bottom: 16px;
+  border-radius: 18px;
+  border: 1px solid transparent;
+}
+
+.wx-banner__icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  font-size: 26px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.wx-banner__body {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.wx-banner__level {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Reads as a separate chip so the signal name and the countdown do not run
+ * together into one long line on a phone. */
+.wx-banner__lead {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-transform: none;
+}
+
+.wx-banner__headline {
+  margin: 6px 0 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.wx-banner__place {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 8px 0 0;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.wx-banner__figures {
+  display: flex;
+  gap: 22px;
+  margin: 0;
+}
+
+.wx-banner__figures dt {
+  margin: 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.75;
+}
+
+.wx-banner__figures dd {
+  margin: 2px 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+/* One class per tone rather than per signal number, so the five PAGASA levels
+ * collapse into the three things a farm owner does about them. */
+.wx-banner--calm {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.24);
+  color: #14532d;
+}
+
+.wx-banner--watch {
+  background: rgba(234, 179, 8, 0.14);
+  border-color: rgba(234, 179, 8, 0.3);
+  color: #854d0e;
+}
+
+.wx-banner--warning {
+  background: rgba(249, 115, 22, 0.14);
+  border-color: rgba(249, 115, 22, 0.32);
+  color: #9a3412;
+}
+
+.wx-banner--severe {
+  background: rgba(220, 38, 38, 0.13);
+  border-color: rgba(220, 38, 38, 0.32);
+  color: #991b1b;
+}
+
+/* ---------- seven-day strip ---------- */
+
+.wx-strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(104px, 1fr);
+  gap: 10px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 6px;
+}
+
+.wx-day {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 14px 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(20, 83, 45, 0.12);
+  background: var(--ion-card-background);
+  text-align: center;
+}
+
+.wx-day--today {
+  border-color: var(--ion-color-primary);
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.wx-day__name {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ion-text-color);
+}
+
+.wx-day__date {
+  margin: 0;
+  font-size: 11px;
+  color: var(--ion-color-medium);
+}
+
+.wx-day__icon {
+  margin: 6px 0;
+  font-size: 26px;
+  color: var(--ion-color-primary);
+}
+
+.wx-day__temp {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.wx-day__temp span {
+  font-weight: 500;
+  color: var(--ion-color-medium);
+}
+
+.wx-day__summary {
+  margin: 4px 0 6px;
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--ion-color-medium);
+}
+
+.wx-day__metric {
+  margin: 0;
+  font-size: 11px;
+  color: var(--ion-color-medium);
+}
+
+/* A gust at or above the Signal No. 1 threshold is the reason to read the
+ * strip at all, so it is the one number that is not grey. */
+.wx-day__metric--alert {
+  font-weight: 700;
+  color: var(--ion-color-danger);
+}
+
+/* ---------- preparation checklist ---------- */
+
+.wx-actions {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wx-actions li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.wx-actions ion-icon {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  font-size: 18px;
+  color: var(--ion-color-primary);
+}
+
+/* ---------- equipment verdicts ---------- */
+
+.wx-verdict {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.wx-verdict__price {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--ion-color-medium);
+}
+
+.wx-verdict--Recommended {
+  background: rgba(34, 197, 94, 0.15);
+  color: #15803d;
+}
+
+.wx-verdict--Caution {
+  background: rgba(234, 179, 8, 0.18);
+  color: #a16207;
+}
+
+.wx-verdict--Postpone {
+  background: rgba(220, 38, 38, 0.12);
+  color: var(--ion-color-danger);
+}
+
+.wx-verdict-icon--Recommended {
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--ion-color-primary);
+}
+
+.wx-verdict-icon--Caution {
+  background: rgba(234, 179, 8, 0.15);
+  color: #a16207;
+}
+
+.wx-verdict-icon--Postpone {
+  background: rgba(220, 38, 38, 0.12);
+  color: var(--ion-color-danger);
+}
+
+@media (max-width: 620px) {
+  .wx-banner {
+    gap: 14px;
+    padding: 16px;
+  }
+
+  /* The two figures sit under the headline rather than beside it, where they
+   * would squeeze the sentence into a column two words wide. */
+  .wx-banner__figures {
+    flex: 1 1 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Fetch time, next to the place it was fetched for. */
+.wx-banner__stamp {
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1px solid currentColor;
+  opacity: 0.7;
+}
+
+.wx-retry {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding-bottom: 8px;
+}
+
+/* Sits under the ranked fleet, centred so it reads as an action on the list
+ * rather than as another row in it. */
+.wx-more {
+  display: flex;
+  justify-content: center;
+  padding-top: 14px;
+}

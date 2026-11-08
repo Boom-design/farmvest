@@ -1,0 +1,139 @@
+/* My Account: a compact hero, then panels in a two-column grid so the page has
+ * no large empty stretches on a wide screen. */
+
+/* One centred column: the page carried a two-column grid, which left a tall
+ * empty space beside the panels for roles that have no verification card. */
+.account-page {
+  max-width: 780px;
+}
+
+.account-hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 16px;
+  padding: 20px;
+}
+
+.account-hero__photo {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  flex-shrink: 0;
+}
+
+.account-hero__photo img {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(20, 83, 45, 0.12);
+}
+
+.account-hero__photo ion-icon {
+  font-size: 84px;
+  color: var(--ion-color-primary);
+}
+
+/* A labelled button, not a bare camera icon: the action has to read as
+ * "change profile picture" without the user having to guess. */
+.account-hero__photo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.account-hero__photo-actions .dash-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.account-hero__photo-actions ion-icon {
+  font-size: 16px;
+}
+
+.account-hero__identity {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.account-hero__name {
+  margin: 0 0 6px;
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.account-hero__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-bottom: 10px;
+}
+
+.account-hero__facts span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--ion-color-medium);
+  word-break: break-word;
+}
+
+.account-hero__facts ion-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.account-hero__badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.account-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+.dash-form--two {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 620px) {
+  .dash-form--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.account-note {
+  margin: 12px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #15803d;
+}
+
+/* Explains a field group before the fields, where a hint under them would be
+ * read too late. */
+.account-lead {
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+/* The payment methods panel holds a list and a form, so it takes the full width
+ * of the two-column grid rather than sitting in one of its columns. */
+.account-wide {
+  grid-column: 1 / -1;
+}

@@ -1,0 +1,168 @@
+/* Live camera capture with a liveness challenge.
+ *
+ * The ring around the preview is the whole feedback loop: grey while no face is
+ * found, gold while the challenge is being performed, green once it passes. A
+ * person holding a phone at arm's length cannot read a sentence, but they can
+ * see a colour change. */
+
+.face-capture {
+  display: grid;
+  gap: 14px;
+}
+
+.face-capture__stage {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0c2a18;
+}
+
+.face-capture__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* A selfie preview is mirrored, the way people expect their own reflection.
+ * The captured frame is not: it is evidence, and should read the right way
+ * round. */
+.face-capture__video--mirror {
+  transform: scaleX(-1);
+}
+
+.face-capture__veil {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  background: rgba(12, 42, 24, 0.85);
+  color: #fff;
+  font-size: 13px;
+}
+
+.face-capture__ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 62%;
+  aspect-ratio: 3 / 4;
+  transform: translate(-50%, -50%);
+  border: 3px dashed rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: border-color 160ms ease;
+}
+
+.face-capture__ring--seen {
+  border-style: solid;
+  border-color: #eab308;
+}
+
+.face-capture__ring--done {
+  border-style: solid;
+  border-color: #22c55e;
+}
+
+.face-capture__prompt {
+  text-align: center;
+}
+
+.face-capture__instruction {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f2e1c;
+}
+
+.face-capture__hint {
+  margin: 0;
+  font-size: 12.5px;
+  color: #64748b;
+}
+
+.face-capture__done {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #15803d;
+}
+
+.face-capture__done ion-icon {
+  font-size: 20px;
+}
+
+.face-capture__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.face-capture__actions .dash-btn {
+  flex: 1 1 0;
+  justify-content: center;
+}
+
+/* Face found but too far away. Amber rather than green: something is right and
+ * something still has to change. */
+.face-capture__ring--far {
+  border-style: solid;
+  border-color: rgba(234, 179, 8, 0.5);
+}
+
+/* The four steps, so the person can see how much is left rather than being
+ * asked for one thing after another with no end in sight. */
+
+.face-steps {
+  list-style: none;
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+}
+
+.face-steps__item {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 4px;
+  border: 1px solid var(--dash-line, #e2e8f0);
+  border-radius: 9px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #94a3b8;
+  background: #fff;
+}
+
+.face-steps__item ion-icon {
+  font-size: 16px;
+  color: #cbd5e1;
+}
+
+.face-steps__item--now {
+  border-color: var(--ion-color-primary);
+  color: var(--ion-color-primary);
+}
+
+.face-steps__item--now ion-icon {
+  color: var(--ion-color-primary);
+}
+
+.face-steps__item--done {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.08);
+  color: #15803d;
+}
+
+.face-steps__item--done ion-icon {
+  color: #22c55e;
+}

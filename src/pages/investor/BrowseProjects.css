@@ -1,0 +1,635 @@
+/* Browse Projects. A card grid rather than a table: an investor is choosing
+ * between farms, and a photo and a funding bar decide that faster than a row of
+ * figures does. */
+
+.browse-filter {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.browse-filter label {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.browse-filter .dash-select {
+  width: auto;
+  min-width: 140px;
+}
+
+.browse-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.browse-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  border: 1px solid rgba(20, 83, 45, 0.12);
+  background: var(--ion-card-background);
+  overflow: hidden;
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.14s ease;
+}
+
+.browse-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(20, 83, 45, 0.12);
+}
+
+.browse-card__art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 152px;
+  overflow: hidden;
+}
+
+.browse-card__art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A project with no cover photo still reads as its category instead of as a
+ * broken image. */
+.browse-card__emoji {
+  font-size: 54px;
+  line-height: 1;
+}
+
+.browse-card__badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ion-color-primary);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.browse-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 15px 15px;
+}
+
+.browse-card__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.browse-card__owner {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  font-size: 12px;
+  color: var(--ion-color-medium);
+}
+
+/* Two lines, so cards in a row stay the same height whatever the owner wrote. */
+.browse-card__desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+  min-height: 34px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ion-color-medium);
+}
+
+.browse-card__funding {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ion-color-medium);
+}
+
+.browse-card__funding strong {
+  color: var(--ion-text-color);
+  font-size: 14px;
+}
+
+.browse-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.browse-card__remaining {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+}
+
+@media (max-width: 620px) {
+  .browse-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .browse-filter .dash-select {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+}
+
+/* ---------- AI #1: the recommendation panel ---------- */
+
+.recommend {
+  padding: 18px;
+  margin-bottom: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(234, 179, 8, 0.08));
+}
+
+.recommend__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-bottom: 14px;
+}
+
+.recommend__head ion-icon {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  font-size: 22px;
+  color: var(--ion-color-primary);
+}
+
+.recommend__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #14532d;
+}
+
+.recommend__lead {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ion-color-medium);
+}
+
+.recommend__grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+}
+
+.recommend__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--ion-card-background);
+  border: 1px solid rgba(20, 83, 45, 0.1);
+}
+
+.recommend__card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.recommend__emoji {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  font-size: 21px;
+}
+
+.recommend__card-titles {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.recommend__card-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.recommend__card-owner {
+  margin: 2px 0 0;
+  font-size: 11.5px;
+  color: var(--ion-color-medium);
+}
+
+/* The number and the band together: the band is what a person reads, the
+ * number is what they compare. */
+.recommend__score {
+  flex: 0 0 auto;
+  display: grid;
+  justify-items: center;
+  padding: 5px 10px;
+  border-radius: 12px;
+  line-height: 1.15;
+}
+
+.recommend__score strong {
+  font-size: 17px;
+}
+
+.recommend__score small {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.recommend__score--strong,
+.browse-card__match--strong {
+  background: rgba(34, 197, 94, 0.18);
+  color: #15803d;
+}
+
+.recommend__score--good,
+.browse-card__match--good {
+  background: rgba(132, 204, 22, 0.2);
+  color: #4d7c0f;
+}
+
+.recommend__score--fair,
+.browse-card__match--fair {
+  background: rgba(234, 179, 8, 0.2);
+  color: #a16207;
+}
+
+.recommend__score--weak,
+.browse-card__match--weak {
+  background: rgba(71, 85, 105, 0.14);
+  color: var(--ion-color-medium);
+}
+
+.recommend__reasons {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recommend__reasons li {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ion-color-medium);
+}
+
+.recommend__reasons ion-icon {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  font-size: 14px;
+}
+
+.recommend__reason--good ion-icon {
+  color: var(--ion-color-primary);
+}
+
+/* A warning is the one line that must not read like the others. */
+.recommend__reason--warn {
+  color: var(--ion-color-danger);
+  font-weight: 600;
+}
+
+.recommend__reason--warn ion-icon {
+  color: var(--ion-color-danger);
+}
+
+.recommend__reason--info ion-icon {
+  color: var(--ion-color-medium);
+}
+
+.recommend__funding {
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px solid rgba(20, 83, 45, 0.1);
+  font-size: 12px;
+  color: var(--ion-color-medium);
+}
+
+/* The same score on the browse card, so the ordering is legible once the
+ * shortlist is scrolled past. */
+.browse-card__match {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  min-width: 30px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* The budget control sits inside the recommendation panel rather than on the
+ * account page. Most investors never found it there, and an unset budget is the
+ * single commonest reason the shortlist comes back empty. */
+
+.recommend__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+  margin: 16px 0 18px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.recommend__controls .dash-field {
+  flex: 1 1 180px;
+  min-width: 160px;
+}
+
+.recommend__controls .dash-btn {
+  flex: 0 0 auto;
+  height: 42px;
+}
+
+.recommend__empty {
+  margin: 0 0 4px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  line-height: 1.5;
+  color: #475569;
+}
+
+/* ---------------------------------------------------------------------------
+ * Investing
+ * ------------------------------------------------------------------------- */
+
+.browse-card__invest {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.invest-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  background: #f1f5f4;
+}
+
+.invest-summary__value {
+  margin: 2px 0 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f2e1c;
+}
+
+/* Section 4 of the agreement, pulled out and put where it cannot be scrolled
+ * past. An investor surprised by a loss is the failure this box prevents. */
+.invest-warning {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  margin: 16px 0;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #eab308;
+  border-radius: 12px;
+  background: #fffbeb;
+}
+
+.invest-warning ion-icon {
+  flex: 0 0 auto;
+  font-size: 22px;
+  color: #b45309;
+}
+
+.invest-warning__title {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #78350f;
+}
+
+.invest-warning__body {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #78350f;
+}
+
+.invest-terms__toggle {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.invest-terms {
+  max-height: 260px;
+  overflow: auto;
+  margin: 10px 0 0;
+  padding: 14px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  font-size: 11.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  color: #1c2721;
+}
+
+.invest-accept {
+  display: flex;
+  gap: 10px;
+  align-items: start;
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #1c2721;
+  cursor: pointer;
+}
+
+.invest-accept input {
+  margin-top: 2px;
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  accent-color: #166534;
+}
+
+/* Locked until the full agreement has been opened. */
+.invest-accept--locked {
+  color: #8a948e;
+  cursor: not-allowed;
+}
+
+.invest-accept__hint {
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #a16207;
+}
+
+@media (max-width: 640px) {
+  .invest-summary {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The offer on a catalogue card: what the farm owner undertakes to pay back.
+ * Above the funding bar, because it is the figure that decides whether the
+ * project is worth opening at all. */
+
+.browse-card__offer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.browse-card__roi {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(22, 101, 52, 0.1);
+  font-size: 12px;
+  font-weight: 700;
+  color: #166534;
+}
+
+.browse-card__cycle {
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+/* What they would be repaid, computed from what they are typing. A percentage
+ * is not a figure anybody checks in their head while deciding. */
+
+.invest-return {
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  background: rgba(22, 101, 52, 0.07);
+}
+
+.invest-return__value {
+  margin: 2px 0 4px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #166534;
+}
+
+.invest-security {
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border: 1px solid var(--dash-line, #e2e8f0);
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.invest-security__asset {
+  margin: 4px 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f2e1c;
+}
+
+/* Who is behind the project, shown before an investor commits. */
+.owner-card {
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid rgba(20, 83, 45, 0.15);
+  border-radius: 12px;
+  background: #f7faf7;
+}
+
+.owner-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.owner-card__label {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ion-color-medium);
+}
+
+.owner-card__name {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.owner-card__place {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #3f4a3f;
+}
+
+.owner-card__place ion-icon,
+.owner-card__checks ion-icon {
+  vertical-align: -2px;
+  color: var(--ion-color-primary);
+}
+
+.owner-card__record p {
+  margin: 0 0 2px;
+  font-size: 13px;
+  text-align: right;
+  color: #3f4a3f;
+}
+
+.owner-card__warn {
+  color: #b91c1c !important;
+  font-weight: 600;
+}
+
+.owner-card__checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 4px 12px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+}
+
+.owner-card__note {
+  margin: 0;
+  font-size: 11px;
+  color: var(--ion-color-medium);
+}

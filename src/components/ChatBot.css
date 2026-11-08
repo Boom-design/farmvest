@@ -1,0 +1,332 @@
+/* Floating help assistant. Sits above the page and below nothing else, so the
+ * z-index clears the sidebar drawer and the dropdown panels. */
+
+.chatbot-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2500;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ion-color-primary);
+  color: #ffffff;
+  font-size: 26px;
+  box-shadow: 0 10px 28px rgba(20, 83, 45, 0.35);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.chatbot-fab:hover {
+  transform: scale(1.06);
+}
+
+/* Perched on the rim of the button, so the closed assistant already says what
+ * it is about before it is opened. */
+.chatbot-fab__mascot {
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.25));
+  pointer-events: none;
+}
+
+.chatbot-fab--hidden {
+  display: none;
+}
+
+.chatbot {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2500;
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  height: 560px;
+  max-height: calc(100vh - 40px);
+  border-radius: 18px;
+  background: var(--ion-card-background);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
+  overflow: hidden;
+}
+
+/* ---------- header ---------- */
+
+.chatbot__head {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 15px;
+  background: var(--ion-color-primary);
+  color: #ffffff;
+}
+
+.chatbot__head-avatar {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  padding: 3px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  object-fit: contain;
+}
+
+.chatbot__head-titles {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.chatbot__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.chatbot__status {
+  margin: 2px 0 0;
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+.chatbot__close {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.chatbot__close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ---------- thread ---------- */
+
+.chatbot__body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 14px;
+  overflow-y: auto;
+  background: rgba(15, 23, 42, 0.03);
+}
+
+.chatbot__row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.chatbot__row--user {
+  justify-content: flex-end;
+}
+
+.chatbot__avatar {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  padding: 2px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid rgba(20, 83, 45, 0.12);
+  object-fit: contain;
+}
+
+/* Holds the column so a continued run of replies stays aligned with the first. */
+.chatbot__avatar--spacer {
+  background: transparent;
+  border-color: transparent;
+}
+
+.chatbot__msg {
+  max-width: 82%;
+  padding: 10px 13px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  /* The answers are written with line breaks and bullet characters, so the
+   * whitespace in them is the formatting. */
+  white-space: pre-wrap;
+}
+
+.chatbot__msg--bot {
+  border-bottom-left-radius: 5px;
+  background: #ffffff;
+  border: 1px solid rgba(20, 83, 45, 0.12);
+  color: var(--ion-text-color);
+}
+
+.chatbot__msg--user {
+  border-bottom-right-radius: 5px;
+  background: var(--ion-color-primary);
+  color: #ffffff;
+}
+
+.chatbot__typing {
+  display: flex;
+  gap: 5px;
+  padding: 14px 15px;
+}
+
+.chatbot__typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(20, 83, 45, 0.4);
+  animation: chatbot-blink 1.2s infinite ease-in-out;
+}
+
+.chatbot__typing span:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.chatbot__typing span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+@keyframes chatbot-blink {
+  0%,
+  70%,
+  100% {
+    opacity: 0.3;
+  }
+  35% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chatbot__typing span {
+    animation: none;
+  }
+}
+
+/* ---------- choices in the thread ---------- */
+
+.chatbot__options {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  /* Indented to the width of the avatar column, so the choices line up under
+   * the reply that offered them. */
+  margin-left: 38px;
+}
+
+.chatbot__options-lead {
+  margin: 2px 0 2px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ion-color-medium);
+}
+
+.chatbot__option {
+  padding: 10px 14px;
+  border: 1.5px solid rgba(20, 83, 45, 0.22);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--ion-color-primary);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.chatbot__option:hover:enabled {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: var(--ion-color-primary);
+}
+
+.chatbot__option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Reads as a way to see the rest, not as another question. */
+.chatbot__option--more {
+  border-style: dashed;
+  color: var(--ion-color-medium);
+  font-weight: 500;
+}
+
+/* ---------- compose ---------- */
+
+.chatbot__compose {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid rgba(20, 83, 45, 0.1);
+}
+
+.chatbot__compose input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 10px 13px;
+  border: 1.5px solid rgba(20, 83, 45, 0.18);
+  border-radius: 999px;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+}
+
+.chatbot__compose input:focus {
+  border-color: var(--ion-color-primary);
+}
+
+.chatbot__compose button {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ion-color-primary);
+  color: #ffffff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.chatbot__compose button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 620px) {
+  .chatbot-fab {
+    right: 14px;
+    bottom: 14px;
+  }
+
+  /* Nearly full screen on a phone: a 380px panel in the corner leaves the
+   * answers three or four words wide. */
+  .chatbot {
+    right: 8px;
+    left: 8px;
+    bottom: 8px;
+    width: auto;
+    max-width: none;
+    height: calc(100vh - 80px);
+  }
+}

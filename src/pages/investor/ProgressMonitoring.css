@@ -1,0 +1,112 @@
+/* Progress Monitoring. The photo is the evidence, so the card leads with it. */
+
+.monitor-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px 17px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  background: rgba(234, 179, 8, 0.13);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  color: #854d0e;
+}
+
+.monitor-alert ion-icon {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  font-size: 22px;
+}
+
+.monitor-alert__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.monitor-alert__body {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.monitor-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.monitor-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  border: 1px solid rgba(20, 83, 45, 0.12);
+  background: var(--ion-card-background);
+  overflow: hidden;
+}
+
+.monitor-card__art {
+  display: grid;
+  place-items: center;
+  height: 170px;
+  background: rgba(15, 23, 42, 0.05);
+  color: var(--ion-color-medium);
+  font-size: 34px;
+  overflow: hidden;
+}
+
+.monitor-card__art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.monitor-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px 14px;
+}
+
+.monitor-card__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Three lines, so a long note does not stretch one card past its neighbours. */
+.monitor-card__notes {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ion-color-medium);
+}
+
+.monitor-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: var(--ion-color-medium);
+}
+
+.monitor-card__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.monitor-card__meta ion-icon {
+  font-size: 14px;
+}
+
+@media (max-width: 620px) {
+  .monitor-grid {
+    grid-template-columns: 1fr;
+  }
+}

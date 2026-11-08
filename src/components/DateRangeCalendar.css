@@ -1,0 +1,142 @@
+/* Month grid for picking a rental period.
+ *
+ * A booked day is red and not clickable, so an impossible booking is not
+ * something the renter can type. The colours carry a shape as well: a blocked
+ * day is struck through, because red alone is invisible to a colour-blind
+ * reader and this is the one distinction the control exists to make. */
+
+.cal {
+  border: 1px solid var(--dash-line, #e2e8f0);
+  border-radius: 12px;
+  padding: 14px;
+  background: #fff;
+}
+
+.cal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cal__month {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f2e1c;
+}
+
+.cal__nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--dash-line, #e2e8f0);
+  border-radius: 8px;
+  background: #fff;
+  color: #475569;
+  cursor: pointer;
+}
+
+.cal__nav:hover {
+  background: #f1f5f4;
+}
+
+.cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.cal__grid--weekdays {
+  margin-bottom: 4px;
+}
+
+.cal__weekday {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  padding: 4px 0;
+}
+
+.cal__day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: #f8fafc;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1c2721;
+  cursor: pointer;
+}
+
+.cal__day:hover:not(:disabled) {
+  border-color: var(--ion-color-primary);
+}
+
+.cal__day--blank {
+  background: transparent;
+  cursor: default;
+}
+
+.cal__day--past {
+  background: transparent;
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.cal__day--blocked {
+  background: #fee2e2;
+  color: #b91c1c;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.cal__day--selected {
+  background: rgba(22, 101, 52, 0.14);
+  color: #14532d;
+}
+
+/* The ends of the range are solid, so a long booking reads as one block with
+ * two handles rather than a wash of colour. */
+.cal__day--start,
+.cal__day--end {
+  background: var(--ion-color-primary);
+  color: #fff;
+}
+
+.cal__legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin-top: 12px;
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+.cal__key {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  margin-right: -6px;
+}
+
+.cal__key--selected {
+  background: var(--ion-color-primary);
+}
+
+.cal__key--blocked {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+}
+
+.cal__key--past {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+}

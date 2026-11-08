@@ -1,0 +1,214 @@
+/* Dark green brand sidebar.
+ *
+ * Phones and tablets get a slide-in drawer; from 992px up the sidebar is
+ * permanent and the router outlet is pushed to the right of it. The 992px
+ * breakpoint appears in exactly two rules below and nowhere else, so the drawer
+ * and the hamburger button can never disagree about which mode is active. */
+
+.sidenav {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  width: 264px;
+  max-width: 85vw;
+  display: flex;
+  flex-direction: column;
+  background: var(--ion-color-dark);
+  color: rgba(255, 255, 255, 0.85);
+  transform: translateX(-100%);
+  transition: transform 220ms ease;
+  overflow-y: auto;
+}
+
+.sidenav--open {
+  transform: translateX(0);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+.sidenav-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(10, 25, 15, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.sidenav-backdrop--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidenav__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px 16px;
+}
+
+.sidenav__brand-logo {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.sidenav__brand-name {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+}
+
+.sidenav__brand-name span {
+  color: var(--ion-color-success);
+}
+
+.sidenav__brand-tagline {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.sidenav__close {
+  margin-left: auto;
+  background: transparent;
+  border: 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 22px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.sidenav__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 12px;
+}
+
+.sidenav__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 14px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sidenav__item ion-icon {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+}
+
+.sidenav__item:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sidenav__item:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.sidenav__item--active {
+  background: var(--ion-color-primary);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.sidenav__item--active ion-icon {
+  color: #ffffff;
+}
+
+/* Farm illustration behind the bottom of the sidebar, fading into it so it
+ * reads as background art rather than a pasted-in picture.
+ *
+ * It sits behind the menu instead of taking a slot in it. As a slot it only
+ * got the height the menu left over -- about 25px on a 712px laptop screen --
+ * which showed a sliver of the hills and the barn cut in half. */
+.sidenav__art {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 264px;
+  z-index: 0;
+  pointer-events: none;
+  line-height: 0;
+  opacity: 0.55;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 55%);
+  mask-image: linear-gradient(to bottom, transparent, #000 55%);
+}
+
+.sidenav__art img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+/* The menu and logout row stay above the picture. */
+.sidenav__brand,
+.sidenav__list,
+.sidenav__footer {
+  position: relative;
+  z-index: 1;
+}
+
+.sidenav__footer {
+  margin-top: auto;
+  padding: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ---------- permanent sidebar from 992px up ---------- */
+
+@media (min-width: 992px) {
+  .sidenav {
+    transform: translateX(0);
+    box-shadow: none;
+  }
+
+  .sidenav__close,
+  .sidenav-backdrop {
+    display: none;
+  }
+
+  /* The page area is positioned absolutely, so the page content is moved clear
+   * of the sidebar by offsetting the area itself. */
+  body.has-sidenav #main {
+    left: 264px;
+  }
+}
+
+/* Group heading inside the nav list. Ten flat entries read as a wall on a
+ * phone; the two halves of the platform are different work, so they are
+ * labelled rather than merely ordered. */
+
+.sidenav__group {
+  margin: 16px 0 6px;
+  padding: 0 14px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.sidenav__group:first-child {
+  margin-top: 6px;
+}

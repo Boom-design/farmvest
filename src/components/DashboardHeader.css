@@ -1,0 +1,74 @@
+/* White top bar that sits above the cream dashboard background. */
+
+/* The account dropdown hangs below the toolbar, which clips its children by
+ * default - both the host and its internal container have to let it through. */
+.dash-header,
+.dash-header__toolbar {
+  box-shadow: none;
+  overflow: visible;
+  contain: none;
+}
+
+.dash-header__toolbar::part(container) {
+  overflow: visible;
+}
+
+.dash-header__toolbar {
+  --background: #ffffff;
+  --color: var(--ion-color-dark);
+  --border-width: 0 0 1px 0;
+  --border-color: rgba(20, 83, 45, 0.08);
+  --min-height: 68px;
+  padding-inline: 8px;
+}
+
+/* Opens the drawer on phones and tablets. It is a plain button so nothing can
+ * hide it but the one media query below, which matches the breakpoint where the
+ * sidebar becomes permanent (see SideNav.css). */
+.dash-header__nav-toggle {
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 0;
+  padding: 8px;
+  margin-inline-end: 2px;
+  font-size: 26px;
+  color: var(--ion-color-dark);
+  cursor: pointer;
+}
+
+@media (min-width: 992px) {
+  .dash-header__nav-toggle {
+    display: none;
+  }
+}
+
+.dash-header__titles {
+  padding-inline-start: 6px;
+}
+
+.dash-header__titles h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.dash-header__titles p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--ion-color-medium);
+}
+
+/* The title can be long; the bell and account chip on the right keep their size,
+ * so the heading is what gives way on a narrow screen. */
+.dash-header__titles h1,
+.dash-header__titles p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dash-header__toolbar ion-buttons[slot='end'] {
+  gap: 2px;
+}

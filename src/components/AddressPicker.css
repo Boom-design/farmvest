@@ -1,0 +1,40 @@
+/* Cascading province / city / barangay selects. */
+
+.address-picker {
+  display: grid;
+  gap: 12px;
+  padding: 12px 0 4px;
+}
+
+.address-picker__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.address-picker__field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ion-color-medium);
+}
+
+.address-picker__select {
+  width: 100%;
+  border: 1px solid rgba(20, 83, 45, 0.18);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ion-color-dark);
+  background: #ffffff;
+}
+
+.address-picker__select:disabled {
+  background: #f2f4ec;
+  color: var(--ion-color-medium);
+}
+
+.address-picker__select:focus {
+  outline: 2px solid rgba(22, 101, 52, 0.25);
+  border-color: var(--ion-color-primary);
+}
