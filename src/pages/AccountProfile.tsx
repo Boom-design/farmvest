@@ -472,6 +472,47 @@ const AccountProfile: React.FC = () => {
 
               <div className="account-hero__badges">
                 <span className="dash-pill dash-pill--slate">{role}</span>
+
+            {!isAdmin && (
+                  <>
+                    <span className={pillClass(profile.verification_status)}>
+                      {profile.verification_status}
+                    </span>
+                    {details && (
+                      <span className={pillClass(details.account_status)}>
+                        {details.account_status}
+                      </span>
+                    )}
+                  </>
+                )}
+              </div>
+
+              <div className="account-hero__photo-actions">
+                <button
+                  type="button"
+                  className="dash-btn dash-btn--slate"
+                  onClick={() => fileRef.current?.click()}
+                  disabled={uploadingPhoto}
+                >
+                  <IonIcon icon={cameraOutline} />
+                  {uploadingPhoto ? 'Uploading...' : 'Change Profile Picture'}
+                </button>
+
+                {profile.avatar_url && (
+                  <button
+                    type="button"
+                    className="dash-btn dash-btn--ghost"
+                    onClick={removePhoto}
+                    disabled={uploadingPhoto}
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            </div>
+          </section>
+
+          <div className="account-grid">
                 {isAdmin && (
               <section className="dash-panel account-wide">
                 <div className="dash-panel__head">
@@ -726,46 +767,6 @@ const AccountProfile: React.FC = () => {
               </section>
             )}
 
-            {!isAdmin && (
-                  <>
-                    <span className={pillClass(profile.verification_status)}>
-                      {profile.verification_status}
-                    </span>
-                    {details && (
-                      <span className={pillClass(details.account_status)}>
-                        {details.account_status}
-                      </span>
-                    )}
-                  </>
-                )}
-              </div>
-
-              <div className="account-hero__photo-actions">
-                <button
-                  type="button"
-                  className="dash-btn dash-btn--slate"
-                  onClick={() => fileRef.current?.click()}
-                  disabled={uploadingPhoto}
-                >
-                  <IonIcon icon={cameraOutline} />
-                  {uploadingPhoto ? 'Uploading...' : 'Change Profile Picture'}
-                </button>
-
-                {profile.avatar_url && (
-                  <button
-                    type="button"
-                    className="dash-btn dash-btn--ghost"
-                    onClick={removePhoto}
-                    disabled={uploadingPhoto}
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            </div>
-          </section>
-
-          <div className="account-grid">
             <section className="dash-panel">
               <div className="dash-panel__head">
                 <h2 className="dash-panel__title">Profile Details</h2>

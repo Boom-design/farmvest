@@ -94,10 +94,17 @@
   gap: 8px;
 }
 
+/* minmax(0, 1fr), not 1fr: a bare 1fr grows to fit its widest child (the address
+ * selects, the payout table), which pushed the panels past a phone's screen and
+ * left the page unable to scroll on iPhone. */
 .account-grid {
   display: grid;
   gap: 16px;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.account-grid > * {
+  min-width: 0;
 }
 
 .dash-form--two {
